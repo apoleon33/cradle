@@ -2,7 +2,6 @@ import 'package:cradle/albumCard.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-
   runApp(const MyApp());
 }
 
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color seedColor = Colors.purpleAccent;
+    Color seedColor = Colors.pink;
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
             seedColor: seedColor, brightness: Brightness.dark),
         useMaterial3: true,
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       home: const MyHomePage(title: 'Cradle'),
     );
   }
@@ -50,7 +49,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -58,7 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-
     });
   }
 
@@ -79,10 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Center(child: Text(widget.title)),
@@ -110,7 +104,10 @@ class _MyHomePageState extends State<MyHomePage> {
             // action in the IDE, or press "p" in the console), to see the
             // wireframe for each widget.
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [AlbumCard(), AlbumCard()],
+            children: [
+              AlbumCard(time: DateTime.now())
+
+            ],
           ),
         ),
       ),

@@ -1,7 +1,52 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:dio/dio.dart';
 
-class AlbumCard extends StatelessWidget {
+class AlbumCard extends StatefulWidget {
+  late DateTime date;
+
+  AlbumCard({super.key, required DateTime time}) {
+    date = time;
+  }
+
+  @override
+  _AlbumCardState createState() => _AlbumCardState(time: date);
+}
+
+class _AlbumCardState extends State<AlbumCard> {
+  late DateTime date;
+
+  String cover =
+      'https://nacionprogresiva.files.wordpress.com/2019/08/tool10000days2.jpg';
+  String name = "10000 Days";
+  String artist = "TOOL";
+  String genre = "metal";
+  double averageRating = 3.69;
+
+  _AlbumCardState({required DateTime time}) {
+    date = time;
+    _getAlbumByDate();
+  }
+
+  void _getAlbumByDate() async {
+    Dio dio = Dio();
+    String website =
+        'https://cradle-api.vercel.app/album/${date.year}/${date.month}/${date.day}';
+    Response apiCall = await dio.get(website);
+    Map result = apiCall.data;
+
+    List genres = result['genre'];
+    setState(() {
+      cover = result['image'];
+      name = result['name'];
+      artist = result['artist'];
+      genre = genres[0];
+      averageRating = result['average_rating'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,8 +66,8 @@ class AlbumCard extends StatelessWidget {
                       ),
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: Image.asset(
-                          'assets/kids.jpg',
+                        child: Image.network(
+                          cover,
                           fit: BoxFit.fitWidth,
                         ),
                       )),
@@ -36,7 +81,7 @@ class AlbumCard extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 8, top: 8),
-                              child: Text("KIDS SEE GHOST",
+                              child: Text(name,
                                   maxLines: 1,
                                   style: Theme.of(context)
                                       .textTheme
@@ -46,7 +91,7 @@ class AlbumCard extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.only(right: 8, left: 8),
                                 child: Text(
-                                  "today",
+                                  "${date.day}/${date.month}",
                                   style: Theme.of(context).textTheme.bodyLarge,
                                   textAlign: TextAlign.right,
                                 ))
@@ -57,7 +102,7 @@ class AlbumCard extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
                               child: Text(
-                                "by KIDS SEE GHOST",
+                                "by $artist",
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             )
@@ -69,7 +114,7 @@ class AlbumCard extends StatelessWidget {
                               padding: EdgeInsets.only(left: 8),
                               child: ActionChip(
                                 avatar: Icon(Icons.music_note),
-                                label: Text("Hip-Hop/Rap"),
+                                label: Text(genre),
                                 onPressed: () {},
                               ),
                             ),
@@ -77,14 +122,15 @@ class AlbumCard extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 8),
                               child: ActionChip(
                                 avatar: SvgPicture.asset("assets/rym.svg"),
-                                label: Text("3.89/5"),
+                                label: Text("$averageRating/5"),
                                 onPressed: () {},
                               ),
                             ),
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 8, top: 16, right: 8),
+                          padding:
+                              const EdgeInsets.only(left: 8, top: 16, right: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
