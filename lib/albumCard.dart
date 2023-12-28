@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:dio/dio.dart';
@@ -47,10 +45,24 @@ class _AlbumCardState extends State<AlbumCard> {
     });
   }
 
+  bool _dateIsToday(DateTime date) {
+    DateTime timeNow = DateTime.now();
+    return ((date.year == timeNow.year) &&
+        (date.month == timeNow.month) &&
+        (date.day == timeNow.day));
+  }
+
+  bool _dateIsYesterday(DateTime date) {
+    DateTime timeNow = DateTime.now();
+    return ((date.year == timeNow.year) &&
+        (date.month == timeNow.month) &&
+        (date.day == (timeNow.day - 1)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width - 16,
+        width: MediaQuery.of(context).size.width - 32,
         height: MediaQuery.of(context).size.height / 2,
         child: Card(
             elevation: 0,
@@ -91,7 +103,11 @@ class _AlbumCardState extends State<AlbumCard> {
                                 padding:
                                     const EdgeInsets.only(right: 8, left: 8),
                                 child: Text(
-                                  "${date.day}/${date.month}",
+                                  (_dateIsToday(date))
+                                      ? "today"
+                                      : (_dateIsYesterday(date))
+                                          ? "yesterday"
+                                          : "${date.day}/${date.month}/${date.year}",
                                   style: Theme.of(context).textTheme.bodyLarge,
                                   textAlign: TextAlign.right,
                                 ))
@@ -114,16 +130,34 @@ class _AlbumCardState extends State<AlbumCard> {
                               padding: EdgeInsets.only(left: 8),
                               child: ActionChip(
                                 avatar: Icon(Icons.music_note),
-                                label: Text(genre),
+                                label: Text(
+                                  genre,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondaryContainer),
+                                ),
                                 onPressed: () {},
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
                               child: ActionChip(
                                 avatar: SvgPicture.asset("assets/rym.svg"),
-                                label: Text("$averageRating/5"),
+                                label: Text(
+                                  "$averageRating/5",
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondaryContainer),
+                                ),
                                 onPressed: () {},
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
                               ),
                             ),
                           ],

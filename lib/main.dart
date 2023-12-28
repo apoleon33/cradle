@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color seedColor = Colors.pink;
+    Color seedColor = const Color(0x00b3272c);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
             seedColor: seedColor, brightness: Brightness.dark),
         useMaterial3: true,
       ),
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
       home: const MyHomePage(title: 'Cradle'),
     );
   }
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Center(child: Text(widget.title)),
@@ -104,9 +104,18 @@ class _MyHomePageState extends State<MyHomePage> {
             // action in the IDE, or press "p" in the console), to see the
             // wireframe for each widget.
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AlbumCard(time: DateTime.now())
 
+            children: [
+              SizedBox(height: 16),
+              AlbumCard(time: DateTime.now()),
+              SizedBox(height: 16),
+              AlbumCard(time: DateTime.parse("2023-12-27")),
+              SizedBox(height: 16),
+              AlbumCard(time: DateTime.parse("2023-12-26")),
+              SizedBox(height: 16),
+              AlbumCard(time: DateTime.parse("2023-11-27")),
+              SizedBox(height: 16),
+              AlbumCard(time: DateTime.parse("2023-12-25"))
             ],
           ),
         ),
