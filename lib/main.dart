@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.dark,
-      home: const MyHomePage(title: 'Cradle'),
+      home: const MyHomePage(title: 'CRADLE'),
     );
   }
 }
@@ -79,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
       date = DateTime(date.year, date.month, date.day - 1);
       albumCards.add(const SizedBox(height: 13));
       albumCards.add(AlbumCard(time: date));
-
     }
 
     return Scaffold(
@@ -94,7 +93,11 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Center(child: Text(widget.title)),
+        title: Center(
+            child: Text(
+          widget.title,
+          style: TextStyle(fontFamily: 'Cloister'),
+        )),
 
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.grid_view))
