@@ -67,6 +67,21 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    DateTime timeNow = DateTime.now();
+    List<Widget> albumCards = [
+      const SizedBox(height: 16),
+      AlbumCard(time: timeNow),
+    ];
+    DateTime deadline = DateTime.parse('2023-12-25');
+    DateTime date = timeNow;
+
+    while (date.isAfter(deadline)) {
+      date = DateTime(date.year, date.month, date.day - 1);
+      albumCards.add(const SizedBox(height: 13));
+      albumCards.add(AlbumCard(time: date));
+
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -105,18 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // wireframe for each widget.
             mainAxisAlignment: MainAxisAlignment.center,
 
-            children: [
-              SizedBox(height: 16),
-              AlbumCard(time: DateTime.now()),
-              SizedBox(height: 16),
-              AlbumCard(time: DateTime.parse("2023-12-27")),
-              SizedBox(height: 16),
-              AlbumCard(time: DateTime.parse("2023-12-26")),
-              SizedBox(height: 16),
-              AlbumCard(time: DateTime.parse("2023-11-27")),
-              SizedBox(height: 16),
-              AlbumCard(time: DateTime.parse("2023-12-25"))
-            ],
+            children: albumCards,
           ),
         ),
       ),
