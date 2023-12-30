@@ -12,3 +12,5 @@ One album per day
   - [ ] see more (...)
   - [ ] group as list/as card
   - [ ] top left menu
+- [ ] widget
+- [ ] notification 1/day
