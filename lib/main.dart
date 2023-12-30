@@ -63,8 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
       const SizedBox(height: 16),
       AlbumCard(time: timeNow),
     ];
-    DateTime deadline = DateTime.parse('2023-12-25');
-    DateTime date = timeNow;
+    DateTime deadline = DateTime.parse('2023-12-31');
+    DateTime date = DateTime.parse('${timeNow.year}-${timeNow.month}-${timeNow.day}');
 
     while (date.isAfter(deadline)) {
       date = DateTime(date.year, date.month, date.day - 1);
