@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
             seedColor: seedColor, brightness: Brightness.dark),
         useMaterial3: true,
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       home: const MyHomePage(title: 'CRADLE'),
     );
   }
