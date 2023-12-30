@@ -127,9 +127,9 @@ class _AlbumCardState extends State<AlbumCard> {
                         Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(left: 8),
+                              padding: const EdgeInsets.only(left: 8),
                               child: ActionChip(
-                                avatar: Icon(Icons.music_note),
+                                avatar: const Icon(Icons.music_note),
                                 label: Text(
                                   genre,
                                   style: TextStyle(
