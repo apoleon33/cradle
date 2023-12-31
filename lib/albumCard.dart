@@ -1,3 +1,4 @@
+import 'package:cradle/moreInfoMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:dio/dio.dart';
@@ -38,7 +39,7 @@ class _AlbumCardState extends State<AlbumCard> {
     List genres = result['genre'];
     setState(() {
       cover = Image.network(
-        result['image'],
+        result['image']['uri'],
         fit: BoxFit.fitWidth,
       );
       name = result['name'];
@@ -168,9 +169,8 @@ class _AlbumCardState extends State<AlbumCard> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton.filled(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.more_vert)),
+                              const MoreInfoMenu(),
+
                               // new Spacer(),
                               FilledButton.icon(
                                 icon: SvgPicture.asset(
