@@ -16,12 +16,12 @@ class AlbumCard extends StatefulWidget {
 class _AlbumCardState extends State<AlbumCard> {
   late DateTime date;
 
-  String cover =
-      'https://nacionprogresiva.files.wordpress.com/2019/08/tool10000days2.jpg';
-  String name = "10000 Days";
-  String artist = "TOOL";
-  String genre = "metal";
-  double averageRating = 3.69;
+  Image cover = Image.asset('assets/default.png', fit: BoxFit.fitWidth);
+
+  String name = "album";
+  String artist = "artist";
+  String genre = "genre";
+  double averageRating = 5.0;
 
   _AlbumCardState({required DateTime time}) {
     date = time;
@@ -37,7 +37,10 @@ class _AlbumCardState extends State<AlbumCard> {
 
     List genres = result['genre'];
     setState(() {
-      cover = result['image'];
+      cover = Image.network(
+        result['image'],
+        fit: BoxFit.fitWidth,
+      );
       name = result['name'];
       artist = result['artist'];
       genre = genres[0];
@@ -78,10 +81,7 @@ class _AlbumCardState extends State<AlbumCard> {
                       ),
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: Image.network(
-                          cover,
-                          fit: BoxFit.fitWidth,
-                        ),
+                        child: cover,
                       )),
                 ),
                 Expanded(
