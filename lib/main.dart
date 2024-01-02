@@ -1,4 +1,4 @@
-import 'package:cradle/albumCard.dart';
+import 'package:cradle/albumCard/albumCard.dart';
 import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -38,6 +38,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isCard = true;
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -49,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
     DateTime timeNow = DateTime.now();
     List<Widget> albumCards = [
       const SizedBox(height: 16),
-      AlbumCard(time: timeNow),
+      AlbumCard(time: timeNow, isCard: isCard),
     ];
 
     DateTime deadline = DateTime.parse('2023-12-31');
@@ -70,7 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
     while (date.isAfter(deadline)) {
       date = DateTime(date.year, date.month, date.day - 1);
       albumCards.add(const SizedBox(height: 13));
-      albumCards.add(AlbumCard(time: date));
+      albumCards.add(AlbumCard(
+        time: date,
+        isCard: isCard,
+      ));
     }
 
     return Scaffold(
@@ -92,31 +97,23 @@ class _MyHomePageState extends State<MyHomePage> {
         )),
 
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.grid_view))
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  isCard = !isCard;
+                });
+              },
+              icon: (!isCard)
+                  ? const Icon(Icons.view_list)
+                  : const Icon(Icons.grid_view))
         ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: SingleChildScrollView(
-          child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            //
-            // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-            // action in the IDE, or press "p" in the console), to see the
-            // wireframe for each widget.
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Column(
 
-            children: albumCards,
-          ),
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: albumCards,
         ),
       ),
     );

@@ -10,7 +10,7 @@ One album per day
 - [ ] working buttons
   - [ ] link to spotify
   - [ ] see more (...)
-  - [ ] group as list/as card
+  - [x] group as list/as card
   - [ ] top left menu
 - [ ] widget
 - [ ] notification 1/day
