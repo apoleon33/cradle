@@ -5,7 +5,7 @@ One album per day
 ## TODO-LIST
 - [x] better algorithm
 - [x] always accurate cover & links
-- [ ] deactivate spotify link if it does not exist
+- [x] deactivate spotify link if it does not exist
 - [ ] app theme based on today's record
 - [ ] working buttons
   - [ ] link to spotify
