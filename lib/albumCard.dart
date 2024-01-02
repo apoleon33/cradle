@@ -39,7 +39,7 @@ class _AlbumCardState extends State<AlbumCard> {
     List genres = result['genre'];
     setState(() {
       cover = Image.network(
-        result['image']['uri'],
+        result['image'],
         fit: BoxFit.fitWidth,
       );
       name = result['name'];
@@ -180,7 +180,7 @@ class _AlbumCardState extends State<AlbumCard> {
                                   width: 18,
                                   height: 18,
                                 ),
-                                onPressed: () {},
+                                onPressed: null,
                                 label: const Text("Listen on Spotify"),
                               ),
                             ],
