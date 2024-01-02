@@ -6,7 +6,7 @@ One album per day
 - [x] better algorithm
 - [x] always accurate cover & links
 - [x] deactivate spotify link if it does not exist
-- [ ] app theme based on today's record
+- [x] app theme based on today's record
 - [ ] working buttons
   - [ ] link to spotify
   - [ ] see more (...)

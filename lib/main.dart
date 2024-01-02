@@ -1,4 +1,5 @@
 import 'package:cradle/albumCard.dart';
+import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -12,20 +13,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color seedColor = const Color(0x00b3272c);
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: seedColor, brightness: Brightness.dark),
-        useMaterial3: true,
-      ),
-      themeMode: ThemeMode.system,
-      home: const MyHomePage(title: 'CRADLE'),
+    return DynamicTheme(
+      child: const MyHomePage(title: 'CRADLE'),
     );
   }
 }
