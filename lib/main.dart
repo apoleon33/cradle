@@ -49,7 +49,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -63,8 +62,21 @@ class _MyHomePageState extends State<MyHomePage> {
       const SizedBox(height: 16),
       AlbumCard(time: timeNow),
     ];
+
     DateTime deadline = DateTime.parse('2023-12-31');
-    DateTime date = DateTime.parse('${timeNow.year}-${timeNow.month}-${timeNow.day}');
+
+    // formating so that it looks like 'year-month-day'
+    String formattedDate = '${timeNow.year}-';
+    if (timeNow.month < 10) {
+      formattedDate += '0';
+    }
+    formattedDate += '${timeNow.month}-';
+    if (timeNow.day < 10) {
+      formattedDate += '0';
+    }
+    formattedDate += '${timeNow.day}';
+
+    DateTime date = DateTime.parse(formattedDate);
 
     while (date.isAfter(deadline)) {
       date = DateTime(date.year, date.month, date.day - 1);
