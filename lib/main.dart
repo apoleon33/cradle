@@ -51,12 +51,12 @@ class _MyHomePageState extends State<MyHomePage> {
     DateTime timeNow = DateTime.now();
     List<Widget> albumCards = [
       const SizedBox(height: 16),
-      AlbumCard(time: timeNow, isCard: isCard),
+      AlbumCard(date: timeNow, isCard: isCard),
     ];
 
     DateTime deadline = DateTime.parse('2023-12-31');
 
-    // formating so that it looks like 'year-month-day'
+    // formatting so that it looks like 'year-month-day'
     String formattedDate = '${timeNow.year}-';
     if (timeNow.month < 10) {
       formattedDate += '0';
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
       date = DateTime(date.year, date.month, date.day - 1);
       albumCards.add(const SizedBox(height: 13));
       albumCards.add(AlbumCard(
-        time: date,
+        date: date,
         isCard: isCard,
       ));
     }
@@ -110,7 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: albumCards,
