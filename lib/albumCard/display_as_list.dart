@@ -1,0 +1,40 @@
+import 'package:cradle/albumCard/display_album.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+
+import '../album.dart';
+
+class DisplayAsList extends DisplayAlbum {
+  Album album;
+  DateTime date;
+
+  DisplayAsList({super.key, required this.album, required this.date});
+
+  @override
+  Widget displayAlbum(BuildContext context) {
+    return ListTile(
+      leading: album.cover == 'assets/default.png'
+          ? Image.asset(
+              album.cover,
+              fit: BoxFit.fitWidth,
+            )
+          : Image.network(
+              album.cover,
+              fit: BoxFit.fitWidth,
+            ),
+      title: Text(album.name),
+      subtitle: Text(album.artist),
+      trailing: Text(
+        (dateIsToday(date))
+            ? "today"
+            : (dateIsYesterday(date))
+                ? "yesterday"
+                : "${date.day}/${date.month}/${date.year}",
+        style: Theme.of(context).textTheme.labelSmall,
+        textAlign: TextAlign.right,
+      ),
+      style: ListTileStyle.list,
+      isThreeLine: true,
+    );
+  }
+}
