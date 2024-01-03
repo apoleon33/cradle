@@ -7,12 +7,10 @@ class AlbumCard extends StatefulWidget {
   late DateTime date;
   bool isCard;
 
-  AlbumCard({super.key, required DateTime time, required this.isCard}) {
-    date = time;
-  }
+  AlbumCard({super.key, required this.date, required this.isCard});
 
   @override
-  State<AlbumCard> createState() => _AlbumCardState(time: date);
+  State<AlbumCard> createState() => _AlbumCardState();
 }
 
 class _AlbumCardState extends State<AlbumCard> {
@@ -24,10 +22,13 @@ class _AlbumCardState extends State<AlbumCard> {
   String genre = "genre";
   double averageRating = 5.0;
 
-  _AlbumCardState({required DateTime time}) {
-    date = time;
-
-    _getAlbumByDate();
+  @override
+  void initState() {
+    super.initState();
+    date = widget.date;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _getAlbumByDate();
+    });
   }
 
   void _getAlbumByDate() async {
