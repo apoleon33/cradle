@@ -12,13 +12,13 @@ class AlbumCard extends StatefulWidget {
   }
 
   @override
-  _AlbumCardState createState() => _AlbumCardState(time: date);
+  State<AlbumCard> createState() => _AlbumCardState(time: date);
 }
 
 class _AlbumCardState extends State<AlbumCard> {
   late DateTime date;
 
-  Image cover = Image.asset('assets/default.png', fit: BoxFit.fitWidth);
+  String cover = 'assets/default.png';
   String name = "album";
   String artist = "artist";
   String genre = "genre";
@@ -26,6 +26,7 @@ class _AlbumCardState extends State<AlbumCard> {
 
   _AlbumCardState({required DateTime time}) {
     date = time;
+
     _getAlbumByDate();
   }
 
@@ -38,10 +39,7 @@ class _AlbumCardState extends State<AlbumCard> {
 
     List genres = result['genre'];
     setState(() {
-      cover = Image.network(
-        result['image'],
-        fit: BoxFit.fitWidth,
-      );
+      cover = result['image'];
       name = result['name'];
       artist = result['artist'];
       genre = genres[0];
@@ -70,7 +68,15 @@ class _AlbumCardState extends State<AlbumCard> {
 
   Widget displayAsList() {
     return ListTile(
-      leading: cover,
+      leading: cover == 'assets/default.png'
+          ? Image.asset(
+              cover,
+              fit: BoxFit.fitWidth,
+            )
+          : Image.network(
+              cover,
+              fit: BoxFit.fitWidth,
+            ),
       title: Text(name),
       subtitle: Text(artist),
       trailing: Text(
@@ -108,7 +114,15 @@ class _AlbumCardState extends State<AlbumCard> {
                             ),
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              child: cover,
+                              child: cover == 'assets/default.png'
+                                  ? Image.asset(
+                                      cover,
+                                      fit: BoxFit.fitWidth,
+                                    )
+                                  : Image.network(
+                                      cover,
+                                      fit: BoxFit.fitWidth,
+                                    ),
                             )),
                       ),
                       Expanded(
