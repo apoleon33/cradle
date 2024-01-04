@@ -1,7 +1,5 @@
 import 'package:cradle/albumCard/display_album.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import '../album.dart';
 
 class DisplayAsList extends DisplayAlbum {
