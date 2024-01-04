@@ -73,30 +73,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.surface,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Align(
             alignment: Alignment.centerLeft,
             child: Text(
               widget.title,
               style: const TextStyle(fontFamily: 'Cloister', fontSize: 24.0),
             )),
-
-        actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  isCard = !isCard;
-                });
-              },
-              icon: (!isCard)
-                  ? const Icon(Icons.view_list)
-                  : const Icon(Icons.grid_view))
-        ],
+        actions: (indexPage == 0)
+            ? [
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isCard = !isCard;
+                      });
+                    },
+                    icon: (!isCard)
+                        ? const Icon(Icons.view_list)
+                        : const Icon(Icons.grid_view))
+              ]
+            : [],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -104,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             albumCards,
-            [Settings()]
+            [const Settings()]
           ][indexPage],
         ),
       ),
