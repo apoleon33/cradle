@@ -27,11 +27,7 @@ class _Settings extends State<Settings> {
     setState(() {
       colorMode = prefs.getInt('color') ?? 0;
     });
-
-    print("theme mode: $colorMode");
   }
-
-  void changeColorMode(int newColorMode) async {}
 
   @override
   Widget build(BuildContext context) {
