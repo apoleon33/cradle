@@ -1,7 +1,8 @@
 import 'package:cradle/navigation.dart';
+import 'package:cradle/route/settings.dart';
 import 'package:flutter/material.dart';
 
-import 'albumCard/albumCard.dart';
+import 'albumCard.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -101,10 +102,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [albumCards, albumCards][indexPage],
+          children: [
+            albumCards,
+            [Settings()]
+          ][indexPage],
         ),
       ),
-      bottomNavigationBar: Navigation(callBack: callBack),
+      bottomNavigationBar:
+          Navigation(callBack: callBack, currentPageIndex: indexPage),
     );
   }
 }

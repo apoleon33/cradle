@@ -2,8 +2,8 @@ import 'package:cradle/album.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-import 'display_as_card.dart';
-import 'display_as_list.dart';
+import '../albumCard/display_as_card.dart';
+import '../albumCard/display_as_list.dart';
 
 class AlbumCard extends StatefulWidget {
   late DateTime date;

@@ -1,8 +1,8 @@
-import 'package:cradle/albumCard/albumCard.dart';
+import 'package:cradle/route/albumCard.dart';
 import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 
-import 'home.dart';
+import 'route/home.dart';
 
 void main() async {
   runApp(const MyApp());

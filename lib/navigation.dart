@@ -4,7 +4,7 @@ class Navigation extends StatefulWidget {
   int currentPageIndex = 0;
   final Function callBack;
 
-  Navigation({super.key, required this.callBack});
+  Navigation({super.key, required this.callBack, this.currentPageIndex = 0});
 
   @override
   State<Navigation> createState() => _Navigation();
@@ -19,8 +19,8 @@ class _Navigation extends State<Navigation> {
       onDestinationSelected: (int index) {
         setState(() {
           widget.currentPageIndex = index;
-          widget.callBack(index);
         });
+        widget.callBack(index);
       },
       destinations: const <Widget>[
         NavigationDestination(
