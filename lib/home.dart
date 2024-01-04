@@ -1,3 +1,4 @@
+import 'package:cradle/navigation.dart';
 import 'package:flutter/material.dart';
 
 import 'albumCard/albumCard.dart';
@@ -22,6 +23,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isCard = true;
+
+  int indexPage = 0;
+
+  callBack(int index) {
+    setState(() {
+      indexPage = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +101,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: albumCards,
+          children: [albumCards, albumCards][indexPage],
         ),
       ),
+      bottomNavigationBar: Navigation(callBack: callBack),
     );
   }
 }
