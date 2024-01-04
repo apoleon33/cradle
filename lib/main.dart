@@ -1,6 +1,6 @@
-import 'package:cradle/route/albumCard.dart';
 import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'route/home.dart';
 
@@ -15,8 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicTheme(
-      child: const MyHomePage(title: 'CRADLE'),
+    return ChangeNotifierProvider(
+      create: (context) => ModeTheme(),
+      child: DynamicTheme(
+        child: const MyHomePage(title: 'CRADLE'),
+      ),
     );
   }
 }

@@ -38,6 +38,8 @@ dependencies:
   flutter_svg: ^2.0.9
   palette_generator:
   dio:
+  shared_preferences: ^2.2.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:

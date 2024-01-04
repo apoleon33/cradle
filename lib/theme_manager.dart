@@ -1,5 +1,9 @@
+import 'dart:collection';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DynamicTheme extends StatefulWidget {
   Widget child;
@@ -14,6 +18,7 @@ class DynamicTheme extends StatefulWidget {
 class _DynamicTheme extends State<DynamicTheme> {
   late ColorScheme currentColorScheme;
   late ColorScheme currentDarkColorScheme;
+  late int themeMode;
 
   @override
   void initState() {
@@ -23,7 +28,20 @@ class _DynamicTheme extends State<DynamicTheme> {
     currentDarkColorScheme = const ColorScheme.dark();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       createTheme(widget.image);
+
+      _getThemeModeFromSettings();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  void _getThemeModeFromSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    themeMode = prefs.getInt('color') ?? 0;
   }
 
   void _getTodayImage() async {
@@ -43,13 +61,22 @@ class _DynamicTheme extends State<DynamicTheme> {
   Widget build(BuildContext context) {
     final ColorScheme lightColorScheme = currentColorScheme;
     final ColorScheme darkColorScheme = currentDarkColorScheme;
-    return MaterialApp(
-        title: 'Cradle',
-        theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-        darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-        themeMode: ThemeMode.system,
-        debugShowCheckedModeBanner: false,
-        home: widget.child);
+    return Consumer<ModeTheme>(
+      builder: (context, modeTheme, child) {
+        return MaterialApp(
+            title: 'Cradle',
+            theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+            darkTheme:
+                ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+            themeMode: (modeTheme.themeMode == 0)
+                ? ThemeMode.system
+                : (modeTheme.themeMode == 1)
+                    ? ThemeMode.light
+                    : ThemeMode.dark,
+            debugShowCheckedModeBanner: false,
+            home: widget.child);
+      },
+    );
   }
 
   Future<void> createTheme(ImageProvider provider) async {
@@ -63,5 +90,26 @@ class _DynamicTheme extends State<DynamicTheme> {
       currentColorScheme = newLightColorScheme;
       currentDarkColorScheme = newDarkColorScheme;
     });
+  }
+}
+
+class ModeTheme extends ChangeNotifier {
+  int _themeMode = 0;
+
+  ModeTheme() {
+    _initThemeMode();
+  }
+
+  void _initThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    themeMode = prefs.getInt('color') ?? 0;
+  }
+
+  int get themeMode => _themeMode;
+
+  set themeMode(int newThemeMode) {
+    _themeMode = newThemeMode;
+    notifyListeners();
   }
 }
