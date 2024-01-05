@@ -43,7 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     DateTime timeNow = DateTime.now();
     List<Widget> albumCards = [
-      const SizedBox(height: 16),
       AlbumCard(date: timeNow, isCard: isCard),
     ];
 
@@ -64,7 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     while (date.isAfter(deadline)) {
       date = DateTime(date.year, date.month, date.day - 1);
-      albumCards.add(const SizedBox(height: 13));
       albumCards.add(AlbumCard(
         date: date,
         isCard: isCard,

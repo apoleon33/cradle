@@ -13,9 +13,10 @@ class DisplayAlbumAsCard extends DisplayAlbum {
 
   @override
   Widget displayAlbum(BuildContext context) {
-    return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 250),
-        child: Center(
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        Center(
           child: SizedBox(
               width: MediaQuery.of(context).size.width - 32,
               height: MediaQuery.of(context).size.height / 2,
@@ -161,6 +162,8 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                           ))
                     ],
                   ))),
-        ));
+        ),
+      ],
+    );
   }
 }
