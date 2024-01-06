@@ -27,23 +27,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int indexPage = 0;
 
-  callBack(int index) {
-    setState(() {
-      indexPage = index;
-    });
-  }
+  late List<Widget> albumList;
 
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+  void _createAlbumList() {
     DateTime timeNow = DateTime.now();
     List<Widget> albumCards = [
-      AlbumCard(date: timeNow, isCard: isCard),
+      AlbumCard(
+        date: timeNow,
+        isCard: isCard,
+        key: ValueKey(timeNow),
+      ),
     ];
 
     DateTime deadline = DateTime.parse('2023-12-31');
@@ -66,8 +59,32 @@ class _MyHomePageState extends State<MyHomePage> {
       albumCards.add(AlbumCard(
         date: date,
         isCard: isCard,
+        key: ValueKey(DateTime.now()),
       ));
     }
+    albumList = albumCards;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _createAlbumList();
+  }
+
+  callBack(int index) {
+    setState(() {
+      indexPage = index;
+    });
+  }
+
+  Future _refreshData() async {
+    _createAlbumList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> albumCards = albumList;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,14 +109,17 @@ class _MyHomePageState extends State<MyHomePage> {
               ]
             : [],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            albumCards,
-            [const Settings()]
-          ][indexPage],
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              albumCards,
+              [const Settings()]
+            ][indexPage],
+          ),
         ),
       ),
       bottomNavigationBar:
