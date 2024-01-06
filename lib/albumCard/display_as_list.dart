@@ -34,7 +34,7 @@ class DisplayAsList extends DisplayAlbum {
             textAlign: TextAlign.right,
           ),
           style: ListTileStyle.list,
-          isThreeLine: true,
+          isThreeLine: false,
         ),
         const Divider(indent: 16.0, endIndent: 16.0)
       ],
