@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _createAlbumList();
     List<Widget> albumCards = albumList;
 
     return Scaffold(
