@@ -11,6 +11,7 @@ One album per day
   - [ ] link to spotify
   - [ ] see more (...)
   - [x] group as list/as card
-  - [ ] top left menu
+  - [x] ~~top left menu~~ replaced by a bottom bar
 - [ ] widget
 - [ ] notification 1/day
+- [ ] settings
