@@ -21,7 +21,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
               width: MediaQuery.of(context).size.width - 32,
               height: MediaQuery.of(context).size.height / 2,
               child: Card(
-                  elevation: 0,
+                  elevation: (dateIsToday(date))? 1: 0,
                   color: Theme.of(context).colorScheme.surfaceVariant,
                   child: Column(
                     children: [
