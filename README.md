@@ -12,6 +12,12 @@ One album per day
   - [ ] see more (...)
   - [x] group as list/as card
   - [x] ~~top left menu~~ replaced by a bottom bar
+  - [ ] short RYM description
 - [ ] widget
 - [ ] notification 1/day
 - [ ] settings
+  - [x] Theme mode
+  - [ ] change music provider
+    - [x] Spotify
+    - [ ] Apple music
+    - [ ] Deezer
