@@ -63,6 +63,7 @@ class _AlbumCardState extends State<AlbumCard> {
         ? DisplayAlbumAsCard(
             album: album,
             date: date,
+            key: ValueKey(album),
           )
         : DisplayAsList(album: album, date: date);
   }

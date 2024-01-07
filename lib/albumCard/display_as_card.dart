@@ -2,14 +2,26 @@ import 'package:cradle/album.dart';
 import 'package:cradle/albumCard/display_album.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../moreInfoMenu.dart';
 
 class DisplayAlbumAsCard extends DisplayAlbum {
   late Album album;
   late DateTime date;
+  Uri _url = Uri.parse('https://flutter.dev');
 
-  DisplayAlbumAsCard({super.key, required this.album, required this.date});
+  DisplayAlbumAsCard({super.key, required this.album, required this.date}) {
+    const String initialUrl = "https://open.spotify.com/search/";
+    String url = Uri.encodeFull('$initialUrl${album.name} - ${album.artist}');
+    _url = Uri.parse(url);
+  }
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
 
   @override
   Widget displayAlbum(BuildContext context) {
@@ -21,7 +33,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
               width: MediaQuery.of(context).size.width - 32,
               height: 425,
               child: Card(
-                  elevation: (dateIsToday(date))? 1: 0,
+                  elevation: (dateIsToday(date)) ? 1 : 0,
                   color: Theme.of(context).colorScheme.surfaceVariant,
                   child: Column(
                     children: [
@@ -152,7 +164,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                         width: 18,
                                         height: 18,
                                       ),
-                                      onPressed: null,
+                                      onPressed: _launchUrl,
                                       label: const Text("Listen on Spotify"),
                                     ),
                                   ],

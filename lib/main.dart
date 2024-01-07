@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'route/home.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
