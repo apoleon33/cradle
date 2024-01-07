@@ -40,7 +40,6 @@ dependencies:
   dio:
   shared_preferences: ^2.2.2
   provider: ^6.1.1
-  window_manager:
   url_launcher:
 
 dev_dependencies:
