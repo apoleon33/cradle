@@ -17,7 +17,7 @@ One album per day
 - [ ] notification 1/day
 - [ ] settings
   - [x] Theme mode
-  - [ ] change music provider
+  - [x] change music provider
     - [x] Spotify
-    - [ ] Apple music
-    - [ ] Deezer
+    - [x] Apple music
+    - [x] Deezer
