@@ -1,6 +1,8 @@
 import 'package:cradle/navigation.dart';
 import 'package:cradle/route/settings.dart';
+import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'albumCard.dart';
 
@@ -87,18 +89,20 @@ class _MyHomePageState extends State<MyHomePage> {
     _createAlbumList();
     List<Widget> albumCards = albumList;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        title: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              widget.title,
-              style: const TextStyle(fontFamily: 'Cloister', fontSize: 24.0),
-            )),
-        actions: (indexPage == 0)
-            ? [
-                IconButton(
+    return ChangeNotifierProvider(
+      create: (context) => ServiceNotifier(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          title: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.title,
+                style: const TextStyle(fontFamily: 'Cloister', fontSize: 24.0),
+              )),
+          actions: (indexPage == 0)
+              ? [
+                  IconButton(
                     onPressed: () {
                       setState(() {
                         isCard = !isCard;
@@ -106,25 +110,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     icon: (!isCard)
                         ? const Icon(Icons.view_list)
-                        : const Icon(Icons.grid_view))
-              ]
-            : [],
-      ),
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              albumCards,
-              [const Settings()]
-            ][indexPage],
+                        : const Icon(Icons.grid_view),
+                  )
+                ]
+              : [],
+        ),
+        body: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                albumCards,
+                [const Settings()]
+              ][indexPage],
+            ),
           ),
         ),
+        bottomNavigationBar: Navigation(
+          callBack: callBack,
+          currentPageIndex: indexPage,
+        ),
       ),
-      bottomNavigationBar:
-          Navigation(callBack: callBack, currentPageIndex: indexPage),
     );
   }
 }

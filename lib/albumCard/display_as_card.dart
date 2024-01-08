@@ -1,7 +1,9 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/albumCard/display_album.dart';
+import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../moreInfoMenu.dart';
@@ -155,18 +157,32 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                     const MoreInfoMenu(),
 
                                     // new Spacer(),
-                                    FilledButton.icon(
-                                      icon: SvgPicture.asset(
-                                        "assets/spotify.svg",
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        width: 18,
-                                        height: 18,
-                                      ),
-                                      onPressed: _launchUrl,
-                                      label: const Text("Listen on Spotify"),
-                                    ),
+
+                                    Consumer<ServiceNotifier>(builder:
+                                        (context, serviceNotifier, child) {
+                                      return FilledButton.icon(
+                                        icon: SvgPicture.asset(
+                                          serviceNotifier
+                                              .currentService.iconPath,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          width: 18,
+                                          height: 18,
+                                        ),
+                                        onPressed: () {
+                                          String initialUrl = serviceNotifier
+                                              .currentService.searchUrl;
+                                          String url = Uri.encodeFull(
+                                              '$initialUrl${album.name} - ${album.artist}');
+                                          _url = Uri.parse(url);
+                                          _launchUrl();
+                                        },
+                                        label: Text(
+                                          "Listen on ${serviceNotifier.currentService.fullName}",
+                                        ),
+                                      );
+                                    })
                                   ],
                                 ),
                               )
