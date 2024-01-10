@@ -10,12 +10,14 @@ One album per day
 - [ ] working buttons
   - [x] link to spotify
   - [ ] see more (...)
+    - [ ] Share
+    - [ ] View in full page
   - [x] group as list/as card
   - [x] ~~top left menu~~ replaced by a bottom bar
   - [ ] short RYM description
 - [ ] widget
 - [ ] notification 1/day
-- [ ] settings
+- [x] settings
   - [x] Theme mode
   - [x] change music provider
     - [x] Spotify
