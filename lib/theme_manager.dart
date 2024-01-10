@@ -1,4 +1,6 @@
-
+import 'package:cradle/album.dart';
+import 'package:cradle/api/cradle_api.dart';
+import 'package:cradle/api/lastfm_api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,14 +47,20 @@ class _DynamicTheme extends State<DynamicTheme> {
 
   void _getTodayImage() async {
     DateTime todayDate = DateTime.now();
-    Dio dio = Dio();
-    String website =
-        "https://cradle-api.vercel.app/album/${todayDate.year}/${todayDate.month}/${todayDate.day}";
+    // Dio dio = Dio();
+    // String website =
+    //     "https://cradle-api.vercel.app/album/${todayDate.year}/${todayDate.month}/${todayDate.day}";
+    //
+    // Response apiCall = await dio.get(website);
+    // Map result = apiCall.data;
+    CradleApi api = CradleApi();
+    Album result = await api.getAlbumByDate(todayDate);
 
-    Response apiCall = await dio.get(website);
-    Map result = apiCall.data;
+    LastFmApi lastfmApi = LastFmApi();
+    var lastfmCover = await lastfmApi.getCover(result);
 
-    widget.image = NetworkImage(result['image']);
+    widget.image =
+        NetworkImage((lastfmApi == null) ? result.cover : lastfmCover);
     createTheme(widget.image);
   }
 
