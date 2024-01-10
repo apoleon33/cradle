@@ -23,3 +23,4 @@ One album per day
     - [x] Spotify
     - [x] Apple music
     - [x] Deezer
+- [ ] Material app logo
