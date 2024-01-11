@@ -21,6 +21,7 @@ class _Settings extends State<Settings> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _getSavedColorMode();
+      _getSavedServices();
     });
   }
 
@@ -29,6 +30,14 @@ class _Settings extends State<Settings> {
     // if it has never been set, default to 0
     setState(() {
       colorMode = prefs.getInt('color') ?? 0;
+    });
+  }
+
+  void _getSavedServices() async {
+    final prefs = await SharedPreferences.getInstance();
+    int serviceNumber = prefs.getInt('service') ?? 0;
+    setState(() {
+      selectedService = Service.values[serviceNumber];
     });
   }
 
