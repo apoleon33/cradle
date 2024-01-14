@@ -1,8 +1,10 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/api/lastfm_api.dart';
+import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 
@@ -43,10 +45,17 @@ class _MoreInfo extends State<MoreInfo> {
   void _getAlbumDescription() async {
     LastFmApi api = LastFmApi();
     Map result = await api.getAlbum(album);
-    String description = result['album']["wiki"]["content"];
-    description = description.replaceAll('\n', '465416');
-    String convertedDescription = html2md.convert(description);
-    convertedDescription = convertedDescription.replaceAll('465416', '\\\n');
+
+    String convertedDescription = '';
+    if (result['album']["wiki"] != null) {
+      String description = result['album']["wiki"]["content"];
+      description = description.replaceAll('Read more', '\n\nRead more');
+      description = description.replaceAll('\n', '465416');
+      convertedDescription = html2md.convert(description);
+      convertedDescription = convertedDescription.replaceAll('465416', '\\\n');
+    } else {
+      convertedDescription = 'No description available';
+    }
 
     setState(() {
       albumDescription = convertedDescription;
@@ -55,88 +64,91 @@ class _MoreInfo extends State<MoreInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).colorScheme.onSurface,
+    return Consumer<ModeTheme>(builder: (context, modeTheme, child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: actualColorScheme,
+        ),
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            title: Text(
+              album.name,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          title: Text(
-            album.name,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleLarge,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(24)),
+                      child: Hero(
+                        tag: album.name,
+                        child: Image.network(album.cover),
+                      ),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 32.0,
+                    left: 32.0,
+                    top: 16.0,
+                  ),
+                  child: Text(
+                    album.name,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 8.0,
+                  ),
+                  child: Text(
+                    album.artist,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 8.0,
+                    right: 16.0,
+                    left: 16.0,
+                    bottom: 60.0,
+                  ),
+                  child: MarkdownBody(
+                    data: albumDescription,
+                    selectable: true,
+                    onTapLink: (text, url, title) {
+                      launchUrl(Uri.parse(url!));
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {},
+            label: Text("Listen to ${album.artist}"),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(24)),
-                    child: Hero(
-                      tag: album.name,
-                      child: Image.network(album.cover),
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 32.0,
-                  left: 32.0,
-                  top: 16.0,
-                ),
-                child: Text(
-                  album.name,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                ),
-                child: Text(
-                  album.artist,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                  right: 16.0,
-                  left: 16.0,
-                ),
-                child: MarkdownBody(
-                  data: albumDescription,
-                  selectable: true,
-                  onTapLink: (text, url, title) {
-                    launchUrl(
-                        Uri.parse(url!)); /*For url_launcher 6.1.0 and higher*/
-                    // launch(url);  /*For url_launcher 6.0.20 and lower*/
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
-          label: const Text("listen to it"),
-        ),
-      ),
-    );
+      );
+    });
   }
 }
