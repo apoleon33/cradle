@@ -5,18 +5,22 @@ import 'package:cradle/env/env.dart';
 class LastFmApi extends Api {
   LastFmApi()
       : super(
-            baseUrl:
-                'https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=$LASTFM_KEY');
+      baseUrl:
+      'https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=$LASTFM_KEY');
+
+  Future<Map> getAlbum(Album album) async =>
+      await callApi(
+        '&artist=${album.artist}&album=${album.name}&format=json',
+      );
 
   Future getCover(Album album) async {
-    Map result = await callApi(
-        '&artist=${album.artist}&album=${album.name}&format=json');
+    Map result = await getAlbum(album);
     var image = result['album']['image'];
 
     return (image != null)
         ? (image.last['#text'] != "")
-            ? image.last['#text']
-            : null
+        ? image.last['#text']
+        : null
         : null;
   }
 }
