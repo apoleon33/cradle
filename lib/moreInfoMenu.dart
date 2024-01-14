@@ -1,19 +1,29 @@
+import 'package:cradle/album.dart';
+import 'package:cradle/route/more_info.dart';
 import 'package:flutter/material.dart';
 
 class MoreInfoMenu extends StatelessWidget {
-  const MoreInfoMenu({
-    super.key,
-  });
+  Album album;
+
+  MoreInfoMenu({super.key, required this.album});
 
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(menuChildren: <Widget>[
       MenuItemButton(
-        child: const Text("yup"),
-        onPressed: () {},
+        leadingIcon: const Icon(Icons.info_rounded),
+        child: const Text("More info"),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MoreInfo(album: album),
+              ));
+        },
       ),
       MenuItemButton(
-        child: const Text("we are here"),
+        leadingIcon: const Icon(Icons.share),
+        child: const Text("Share"),
         onPressed: () {},
       )
     ], builder: builder);

@@ -48,15 +48,18 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                             ),
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              child: album.cover == 'assets/default.png'
-                                  ? Image.asset(
-                                      album.cover,
-                                      fit: BoxFit.fitWidth,
-                                    )
-                                  : Image.network(
-                                      album.cover,
-                                      fit: BoxFit.fitWidth,
-                                    ),
+                              child: Hero(
+                                tag: album.name,
+                                child: album.cover == 'assets/default.png'
+                                    ? Image.asset(
+                                        album.cover,
+                                        fit: BoxFit.fitWidth,
+                                      )
+                                    : Image.network(
+                                        album.cover,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                              ),
                             )),
                       ),
                       Expanded(
@@ -71,13 +74,14 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                     padding:
                                         const EdgeInsets.only(left: 8, top: 8),
                                     child: Text(
-                                        album.name.length > 18
-                                            ? '${album.name.substring(0, 15)}...'
-                                            : album.name,
-                                        maxLines: 1,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall),
+                                      album.name.length > 18
+                                          ? '${album.name.substring(0, 15)}...'
+                                          : album.name,
+                                      maxLines: 1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
+                                    ),
                                   ),
                                   Padding(
                                       padding: const EdgeInsets.only(
@@ -154,13 +158,16 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const MoreInfoMenu(),
+                                    MoreInfoMenu(
+                                      album: album,
+                                    ),
 
                                     // new Spacer(),
 
                                     Consumer<ServiceNotifier>(builder:
                                         (context, serviceNotifier, child) {
                                       return FilledButton.icon(
+                                        
                                         icon: SvgPicture.asset(
                                           serviceNotifier
                                               .currentService.iconPath,
