@@ -3,10 +3,10 @@ import 'package:cradle/api/lastfm_api.dart';
 import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io';
 
 class MoreInfo extends StatefulWidget {
   Album album;
@@ -21,13 +21,17 @@ class _MoreInfo extends State<MoreInfo> {
   late Album album;
   late String albumDescription;
   late ColorScheme actualColorScheme;
+  late ColorScheme actualDarkColorScheme;
+  late List<String> genres;
 
   @override
   void initState() {
     super.initState();
     album = widget.album;
     albumDescription = "";
-    actualColorScheme = const ColorScheme.dark();
+    genres = [""];
+    actualColorScheme = const ColorScheme.light();
+    actualDarkColorScheme = const ColorScheme.dark();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _setCustomTheme();
       _getAlbumDescription();
@@ -36,9 +40,18 @@ class _MoreInfo extends State<MoreInfo> {
 
   void _setCustomTheme() async {
     final ColorScheme newColorScheme = await ColorScheme.fromImageProvider(
-        provider: NetworkImage(album.cover));
+      provider: NetworkImage(album.cover),
+      brightness: Brightness.light,
+    );
+
+    final ColorScheme newDarkScheme = await ColorScheme.fromImageProvider(
+      provider: NetworkImage(album.cover),
+      brightness: Brightness.dark,
+    );
+
     setState(() {
       actualColorScheme = newColorScheme;
+      actualDarkColorScheme = newDarkScheme;
     });
   }
 
@@ -47,108 +60,193 @@ class _MoreInfo extends State<MoreInfo> {
     Map result = await api.getAlbum(album);
 
     String convertedDescription = '';
+    List<String> lastfmGenres = [];
     if (result['album']["wiki"] != null) {
       String description = result['album']["wiki"]["content"];
       description = description.replaceAll('Read more', '\n\nRead more');
       description = description.replaceAll('\n', '465416');
       convertedDescription = html2md.convert(description);
-      convertedDescription = convertedDescription.replaceAll('465416', '\\\n');
+      convertedDescription = convertedDescription.replaceAll('465416', '\n');
     } else {
       convertedDescription = 'No description available';
+    }
+    if (result['album']['tags'] is! String) {
+      for (final genre in result['album']['tags']['tag']) {
+        lastfmGenres.add(genre['name']);
+      }
     }
 
     setState(() {
       albumDescription = convertedDescription;
+      genres = lastfmGenres;
     });
+  }
+
+  bool _isSametag(String tag1, String tag2) =>
+      tag1.toUpperCase() == tag2.toUpperCase();
+
+  String _displaySecondaryGenre() {
+    if (genres == [""]) {
+      return '';
+    }
+    return genres[0];
   }
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context).copyWith(
+      colorScheme: (Theme.of(context).brightness == Brightness.dark)
+          ? actualDarkColorScheme
+          : actualColorScheme,
+      brightness: Theme.of(context).brightness,
+    );
+
+    List<Widget> tagsList = [
+      styledActionChip(
+        theme,
+        const Icon(Icons.music_note),
+        album.genre,
+      ),
+    ];
+    for (var element in genres) {
+      if (!_isSametag(album.genre, element)) {
+        tagsList.add(
+          styledActionChip(
+            theme,
+            (int.tryParse(element) is! int)
+                ? const Icon(Icons.music_note)
+                : const Icon(Icons.event),
+            element,
+          ),
+        );
+      }
+    }
+    tagsList = tagsList.sublist(0, (tagsList.length < 3) ? tagsList.length : 3);
+    tagsList.add(
+      styledActionChip(
+        theme,
+        SvgPicture.asset("assets/rym.svg"),
+        "${album.averageRating}/5",
+      ),
+    );
+
     return Consumer<ModeTheme>(builder: (context, modeTheme, child) {
       return Theme(
-        data: Theme.of(context).copyWith(
-          colorScheme: actualColorScheme,
-        ),
+        data: theme,
         child: Scaffold(
+          backgroundColor: theme.colorScheme.secondaryContainer,
           appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: theme.colorScheme.secondaryContainer,
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
               icon: Icon(
                 Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onSurface,
+                color: theme.colorScheme.onSecondaryContainer,
               ),
             ),
             title: Text(
               album.name,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
             ),
           ),
           body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(24)),
-                      child: Hero(
-                        tag: album.name,
-                        child: Image.network(album.cover),
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    right: 32.0,
-                    left: 32.0,
-                    top: 16.0,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(24)),
+                        child: Hero(
+                          tag: album.name,
+                          child: Image.network(album.cover),
+                        ),
+                      )
+                    ],
                   ),
-                  child: Text(
-                    album.name,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    textAlign: TextAlign.center,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16.0,
+                    ),
+                    child: Text(
+                      album.name,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: theme.colorScheme.onSecondaryContainer,
+                              ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8.0,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                    ),
+                    child: Text(
+                      album.artist,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: theme.colorScheme.onSecondaryContainer,
+                          ),
+                    ),
                   ),
-                  child: Text(
-                    album.artist,
-                    style: Theme.of(context).textTheme.titleMedium,
+                  Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.center,
+                    children: tagsList,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8.0,
-                    right: 16.0,
-                    left: 16.0,
-                    bottom: 60.0,
-                  ),
-                  child: MarkdownBody(
-                    data: albumDescription,
-                    selectable: true,
-                    onTapLink: (text, url, title) {
-                      launchUrl(Uri.parse(url!));
-                    },
-                  ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                    ),
+                    child: MarkdownBody(
+                      data: albumDescription,
+                      selectable: true,
+                      onTapLink: (text, url, title) {
+                        launchUrl(Uri.parse(url!));
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {},
-            label: Text("Listen to ${album.artist}"),
-          ),
+          // floatingActionButton: FloatingActionButton.extended(
+          //   onPressed: () {},
+          //   label: Text("Listen to ${album.artist}"),
+          // ),
         ),
       );
     });
+  }
+
+  Widget styledActionChip(ThemeData theme, Widget avatar, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 8.0,
+      ),
+      child: ActionChip(
+        avatar: avatar,
+        label: Text(
+          text,
+          style: TextStyle(
+            color: theme.colorScheme.onSecondaryContainer,
+          ),
+        ),
+        onPressed: () {},
+        backgroundColor: theme.colorScheme.secondaryContainer,
+      ),
+    );
   }
 }
