@@ -106,7 +106,11 @@ class _Settings extends State<Settings> {
           servicesList.add(
             ButtonSegment(
               value: element,
-              label: Text(element.name),
+              label: Text(
+                element.name,
+                maxLines: 1,
+                overflow: TextOverflow.clip,
+              ),
               icon: SvgPicture.asset(
                 element.iconPath,
                 width: 18.0,

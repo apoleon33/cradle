@@ -19,6 +19,12 @@ enum Service {
     iconPath: "assets/deezer.svg",
     fullName: "Deezer",
     searchUrl: 'https://www.deezer.com/search/',
+  ),
+  youtube(
+    name: "Youtube",
+    iconPath: "assets/youtube.svg",
+    fullName: "Youtube Music",
+    searchUrl: "https://music.youtube.com/search?q=",
   );
 
   const Service({
