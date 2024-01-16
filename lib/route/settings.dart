@@ -1,3 +1,4 @@
+import 'package:cradle/route/settings/theme_mode_settings.dart';
 import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,7 +47,6 @@ class _Settings extends State<Settings> {
     return Center(
       child: Column(
         children: [
-          const Text("Theme mode"),
           buildThemeMode(),
           const Padding(
             padding: EdgeInsets.only(
@@ -58,7 +58,18 @@ class _Settings extends State<Settings> {
               endIndent: 16.0,
             ),
           ),
-          const Text("Default music provider"),
+          const Padding(
+            padding: EdgeInsets.only(
+              left: 8.0,
+              bottom: 4.0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Default music provider"),
+              ],
+            ),
+          ),
           buildServiceSelection(),
         ],
       ),
@@ -66,36 +77,47 @@ class _Settings extends State<Settings> {
   }
 
   Widget buildThemeMode() {
-    return Consumer<ModeTheme>(builder: (context, themeMode, child) {
-      return SegmentedButton(
-        segments: const [
-          ButtonSegment(
-            value: 0,
-            label: Text("system"),
-            icon: Icon(Icons.settings_brightness),
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 8.0,
+        right: 8.0,
+        top: 8.0,
+      ),
+      child: Card(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ThemeModeSetting()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 8.0,
+                  ),
+                  child: Icon(
+                    Icons.settings_brightness,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                ),
+                Text(
+                  "Theme Mode",
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color:
+                          Theme.of(context).colorScheme.onSecondaryContainer),
+                ),
+              ],
+            ),
           ),
-          ButtonSegment(
-            value: 1,
-            label: Text("light"),
-            icon: Icon(Icons.light_mode),
-          ),
-          ButtonSegment(
-            value: 2,
-            label: Text("dark"),
-            icon: Icon(Icons.dark_mode),
-          )
-        ],
-        selected: <int>{themeMode.themeMode},
-        onSelectionChanged: (Set<int> newSelection) async {
-          themeMode.themeMode = newSelection.first;
-          final prefs = await SharedPreferences.getInstance();
-          setState(() {
-            colorMode = newSelection.first;
-          });
-          await prefs.setInt('color', newSelection.first);
-        },
-      );
-    });
+        ),
+      ),
+    );
   }
 
   Widget buildServiceSelection() {
