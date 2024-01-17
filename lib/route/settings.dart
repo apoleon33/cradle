@@ -1,5 +1,4 @@
 import 'package:cradle/route/settings/theme_mode_settings.dart';
-import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';

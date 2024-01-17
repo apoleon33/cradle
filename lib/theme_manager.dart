@@ -1,7 +1,6 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/api/cradle_api.dart';
 import 'package:cradle/api/lastfm_api.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
