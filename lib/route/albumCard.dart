@@ -46,15 +46,15 @@ class _AlbumCardState extends State<AlbumCard> {
 
     LastFmApi lastfmApi = LastFmApi();
     var lastfmCover = await lastfmApi.getCover(result);
-
-    setState(() {
-      cover = (lastfmCover == null) ? result.cover : lastfmCover;
-      name = result.name;
-      artist = result.artist;
-      genre = result.genre;
-      averageRating = result.averageRating;
-
-    });
+    if (mounted) {
+      setState(() {
+        cover = (lastfmCover == null) ? result.cover : lastfmCover;
+        name = result.name;
+        artist = result.artist;
+        genre = result.genre;
+        averageRating = result.averageRating;
+      });
+    }
   }
 
   @override
