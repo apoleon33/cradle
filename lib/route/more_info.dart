@@ -63,16 +63,23 @@ class _MoreInfo extends State<MoreInfo> {
     List<String> lastfmGenres = [];
     if (result['album']["wiki"] != null) {
       String description = result['album']["wiki"]["content"];
-      description = description.replaceAll('Read more', '\n\nRead more');
       description = description.replaceAll('\n', '465416');
       convertedDescription = html2md.convert(description);
+      convertedDescription = convertedDescription.replaceAll(
+        '[Read more',
+        '465416465416[Read more',
+      );
       convertedDescription = convertedDescription.replaceAll('465416', '\n');
     } else {
       convertedDescription = 'No description available';
     }
     if (result['album']['tags'] is! String) {
-      for (final genre in result['album']['tags']['tag']) {
-        lastfmGenres.add(genre['name']);
+      if (result['album']['tags']['tag'].runtimeType == List<dynamic>) {
+        for (final genre in result['album']['tags']['tag']) {
+          lastfmGenres.add(genre['name']);
+        }
+      } else {
+        lastfmGenres.add(result['album']['tags']['tag']['name']);
       }
     }
 
@@ -153,6 +160,12 @@ class _MoreInfo extends State<MoreInfo> {
                     color: theme.colorScheme.onSecondaryContainer,
                   ),
             ),
+            actions: [
+              Icon(
+                Icons.share,
+                color: theme.colorScheme.onSecondaryContainer,
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -209,6 +222,7 @@ class _MoreInfo extends State<MoreInfo> {
                   Padding(
                     padding: const EdgeInsets.only(
                       top: 8.0,
+                      bottom: 32.0,
                     ),
                     child: MarkdownBody(
                       data: albumDescription,
@@ -222,10 +236,6 @@ class _MoreInfo extends State<MoreInfo> {
               ),
             ),
           ),
-          // floatingActionButton: FloatingActionButton.extended(
-          //   onPressed: () {},
-          //   label: Text("Listen to ${album.artist}"),
-          // ),
         ),
       );
     });
