@@ -36,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> albumCards = [
       AlbumCard(
         date: timeNow,
+        // TODO replace this callback with a consumer/provider
         isCard: isCard,
         key: ValueKey(timeNow),
       ),
@@ -64,14 +65,18 @@ class _MyHomePageState extends State<MyHomePage> {
         key: ValueKey(DateTime.now()),
       ));
     }
-    albumList = albumCards;
-    setState(() {});
+
+    setState(() {
+      albumList = albumCards;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _createAlbumList();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _createAlbumList();
+    });
   }
 
   callBack(int index) {
