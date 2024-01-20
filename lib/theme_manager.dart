@@ -36,6 +36,7 @@ class _DynamicTheme extends State<DynamicTheme> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    createTheme(widget.image);
   }
 
   void _getThemeModeFromSettings() async {
@@ -58,8 +59,12 @@ class _DynamicTheme extends State<DynamicTheme> {
     LastFmApi lastfmApi = LastFmApi();
     var lastfmCover = await lastfmApi.getCover(result);
 
-    widget.image =
-        NetworkImage((lastfmApi == null) ? result.cover : lastfmCover);
+    widget.image = NetworkImage(
+      (lastfmCover == null) ? result.cover : lastfmCover,
+    );
+
+    print((lastfmCover == null) ? result.cover : lastfmCover);
+
     createTheme(widget.image);
   }
 
