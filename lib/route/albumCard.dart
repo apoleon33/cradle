@@ -43,11 +43,9 @@ class _AlbumCardState extends State<AlbumCard> {
     // Map result = apiCall.data;
     Album result = await _getAlbumFromCache(date);
 
-    LastFmApi lastfmApi = LastFmApi();
-    var lastfmCover = await lastfmApi.getCover(result);
     if (mounted) {
       setState(() {
-        cover = (lastfmCover == null) ? result.cover : lastfmCover;
+        cover = result.cover;
         name = result.name;
         artist = result.artist;
         genre = result.genre;
@@ -83,6 +81,11 @@ class _AlbumCardState extends State<AlbumCard> {
     } else {
       CradleApi api = CradleApi();
       album = await api.getAlbumByDate(date);
+
+      LastFmApi lastfmApi = LastFmApi();
+      var lastfmCover = await lastfmApi.getCover(album);
+
+      album.cover = (lastfmCover == null) ? album.cover : lastfmCover;
 
       // caching
       pref.setStringList(
