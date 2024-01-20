@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cradle/albumCard/display_as_card.dart';
 import 'package:cradle/albumCard/display_as_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AlbumCard extends StatefulWidget {
   late DateTime date;
@@ -40,9 +41,7 @@ class _AlbumCardState extends State<AlbumCard> {
     //     'https://cradle-api.vercel.app/album/${date.year}/${date.month}/${date.day}';
     // Response apiCall = await dio.get(website);
     // Map result = apiCall.data;
-
-    CradleApi api = CradleApi();
-    Album result = await api.getAlbumByDate(date);
+    Album result = await _getAlbumFromCache(date);
 
     LastFmApi lastfmApi = LastFmApi();
     var lastfmCover = await lastfmApi.getCover(result);
@@ -55,6 +54,49 @@ class _AlbumCardState extends State<AlbumCard> {
         averageRating = result.averageRating;
       });
     }
+  }
+
+  Future<Album> _getAlbumFromCache(DateTime date) async {
+    final pref = await SharedPreferences.getInstance();
+    Album album = Album(
+      cover: 'assets/default.png',
+      name: "album",
+      artist: "artist",
+      genre: 'genre',
+      averageRating: 5.0,
+    );
+
+    if ((pref.getBool('${date.year}-${date.month}-${date.day}') ?? false)) {
+      // The album has been cached
+      List<String> albumData = pref.getStringList(
+        '${date.year}-${date.month}-${date.day}-data',
+      )!;
+
+      album.cover = albumData[0];
+      album.name = albumData[1];
+      album.artist = albumData[2];
+      album.genre = albumData[3];
+
+      album.averageRating = pref.getDouble(
+        '${date.year}-${date.month}-${date.day}-averageRating',
+      )!;
+    } else {
+      CradleApi api = CradleApi();
+      album = await api.getAlbumByDate(date);
+
+      // caching
+      pref.setStringList(
+        '${date.year}-${date.month}-${date.day}-data',
+        [album.cover, album.name, album.artist, album.genre],
+      );
+
+      pref.setDouble('${date.year}-${date.month}-${date.day}-averageRating',
+          album.averageRating);
+
+      pref.setBool('${date.year}-${date.month}-${date.day}', true);
+    }
+
+    return album;
   }
 
   @override
