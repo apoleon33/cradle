@@ -27,6 +27,12 @@ class _ServiceSettingState extends State<ServiceSetting> {
   @override
   Widget build(BuildContext context) {
     List<Widget> radioButtonList = createRadioTiles();
+    radioButtonList.add(
+      Text(
+        "A restart is needed for changes to take place.",
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
