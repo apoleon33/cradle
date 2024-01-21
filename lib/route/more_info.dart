@@ -205,7 +205,8 @@ class _MoreInfo extends State<MoreInfo> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                      top: 8.0,
+                      top: 6.0,
+                      bottom: 16.0
                     ),
                     child: Text(
                       album.artist,
@@ -223,9 +224,14 @@ class _MoreInfo extends State<MoreInfo> {
                     padding: const EdgeInsets.only(
                       top: 8.0,
                       bottom: 32.0,
+                      right: 10.0,
+                      left: 10.0
                     ),
                     child: MarkdownBody(
                       data: albumDescription,
+                      styleSheet: MarkdownStyleSheet(
+                        textAlign: WrapAlignment.start
+                      ),
                       selectable: true,
                       onTapLink: (text, url, title) {
                         launchUrl(Uri.parse(url!));
