@@ -62,10 +62,10 @@ Available subcommands:
 - [x] always accurate cover & links
 - [x] deactivate spotify link if it does not exist
 - [x] app theme based on today's record
-- [ ] working buttons
+- [x] working buttons
   - [x] link to spotify
-  - [ ] see more (...)
-    - [ ] Share
+  - [x] see more (...)
+    - [x] Share
     - [x] View in full page
   - [x] group as list/as card
   - [x] ~~top left menu~~ replaced by a bottom bar
