@@ -1,5 +1,6 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/albumCard/display_album.dart';
+import 'package:cradle/rym_snackbar.dart';
 import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -143,7 +144,12 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                                 .colorScheme
                                                 .onSecondaryContainer),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          RymSnackbar(),
+                                        );
+                                      },
                                       backgroundColor: Theme.of(context)
                                           .colorScheme
                                           .secondaryContainer,
@@ -167,7 +173,6 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                     Consumer<ServiceNotifier>(builder:
                                         (context, serviceNotifier, child) {
                                       return FilledButton.icon(
-                                        
                                         icon: SvgPicture.asset(
                                           serviceNotifier
                                               .currentService.iconPath,
