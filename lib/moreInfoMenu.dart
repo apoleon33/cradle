@@ -1,5 +1,6 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/route/more_info.dart';
+import 'package:cradle/share.dart';
 import 'package:flutter/material.dart';
 
 class MoreInfoMenu extends StatelessWidget {
@@ -24,7 +25,9 @@ class MoreInfoMenu extends StatelessWidget {
       MenuItemButton(
         leadingIcon: const Icon(Icons.share),
         child: const Text("Share"),
-        onPressed: () {},
+        onPressed: () async {
+          shareAlbum(album);
+        },
       )
     ], builder: builder);
   }

@@ -1,5 +1,6 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/api/lastfm_api.dart';
+import 'package:cradle/share.dart';
 import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -161,9 +162,12 @@ class _MoreInfo extends State<MoreInfo> {
                   ),
             ),
             actions: [
-              Icon(
-                Icons.share,
+              IconButton(
+                icon: const Icon(Icons.share),
                 color: theme.colorScheme.onSecondaryContainer,
+                onPressed: () {
+                  shareAlbum(album);
+                },
               ),
             ],
           ),
