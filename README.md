@@ -66,10 +66,10 @@ Available subcommands:
   - [x] link to spotify
   - [ ] see more (...)
     - [ ] Share
-    - [ ] View in full page
+    - [x] View in full page
   - [x] group as list/as card
   - [x] ~~top left menu~~ replaced by a bottom bar
-  - [ ] short RYM description
+  - [x] short RYM description
 - [ ] widget
 - [ ] notification 1/day
 - [x] settings
