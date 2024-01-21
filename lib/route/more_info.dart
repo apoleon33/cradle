@@ -203,7 +203,7 @@ class _MoreInfo extends State<MoreInfo> {
                                 color: theme.colorScheme.onSecondaryContainer,
                               ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                      maxLines: 2,
                       textAlign: TextAlign.center,
                     ),
                   ),
