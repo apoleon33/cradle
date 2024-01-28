@@ -4,7 +4,7 @@
             android:label="cradle"
             android:name="${applicationName}"
             android:enableOnBackInvokedCallback="true"
-            android:icon="@mipmap/ic_launcher">
+            android:icon="@mipmap/launcher_icon">
 
         <activity
                 android:name=".MainActivity"

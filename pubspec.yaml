@@ -47,6 +47,7 @@ dependencies:
   flutter_cache_manager: ^3.3.1
 
 dev_dependencies:
+  flutter_launcher_icons:
   flutter_test:
     sdk: flutter
 
