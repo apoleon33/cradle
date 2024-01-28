@@ -43,25 +43,26 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                       Expanded(
                         flex: 55,
                         child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Hero(
+                              tag: album.cover,
+                              child: album.cover == 'assets/default.png'
+                                  ? Image.asset(
+                                      album.cover,
+                                      fit: BoxFit.fitWidth,
+                                    )
+                                  : Image.network(
+                                      album.cover,
+                                      fit: BoxFit.fitWidth,
+                                    ),
                             ),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Hero(
-                                tag: album.name,
-                                child: album.cover == 'assets/default.png'
-                                    ? Image.asset(
-                                        album.cover,
-                                        fit: BoxFit.fitWidth,
-                                      )
-                                    : Image.network(
-                                        album.cover,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                              ),
-                            )),
+                          ),
+                        ),
                       ),
                       Expanded(
                           flex: 45,

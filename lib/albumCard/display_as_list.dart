@@ -15,7 +15,7 @@ class DisplayAsList extends DisplayAlbum {
       children: [
         ListTile(
           leading: Hero(
-            tag: album.name,
+            tag: album.cover,
             child: album.cover == 'assets/default.png'
                 ? Image.asset(
                     album.cover,
