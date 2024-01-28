@@ -28,6 +28,9 @@ class _MoreInfo extends State<MoreInfo> {
   late List<String> genres;
   late Service service;
 
+  ScrollController scrollController = ScrollController();
+  bool isNameHidden = false;
+
   @override
   void initState() {
     super.initState();
@@ -37,6 +40,14 @@ class _MoreInfo extends State<MoreInfo> {
     actualColorScheme = const ColorScheme.light();
     actualDarkColorScheme = const ColorScheme.dark();
     service = Service.spotify;
+
+    scrollController.addListener(() {
+      double offset = scrollController.offset;
+      setState(() {
+        isNameHidden = offset > 343;
+      });
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _setCustomTheme();
       _getAlbumDescription();
@@ -163,7 +174,7 @@ class _MoreInfo extends State<MoreInfo> {
               ),
             ),
             title: Text(
-              album.name,
+              (isNameHidden) ? album.name : "",
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: theme.colorScheme.onSecondaryContainer,
@@ -180,6 +191,7 @@ class _MoreInfo extends State<MoreInfo> {
             ],
           ),
           body: SingleChildScrollView(
+            controller: scrollController,
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 16.0,
@@ -251,7 +263,6 @@ class _MoreInfo extends State<MoreInfo> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-
             onPressed: () async {
               String initialUrl = service.searchUrl;
               String url =
