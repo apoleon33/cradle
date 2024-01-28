@@ -79,3 +79,5 @@ Available subcommands:
     - [x] Apple music
     - [x] Deezer
 - [ ] Material app logo
+- [ ] github banner on settings
+- [ ] better large screen handling
