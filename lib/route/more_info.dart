@@ -1,5 +1,6 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/api/lastfm_api.dart';
+import 'package:cradle/services.dart';
 import 'package:cradle/share.dart';
 import 'package:cradle/theme_manager.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreInfo extends StatefulWidget {
@@ -24,6 +26,7 @@ class _MoreInfo extends State<MoreInfo> {
   late ColorScheme actualColorScheme;
   late ColorScheme actualDarkColorScheme;
   late List<String> genres;
+  late Service service;
 
   @override
   void initState() {
@@ -33,9 +36,11 @@ class _MoreInfo extends State<MoreInfo> {
     genres = [""];
     actualColorScheme = const ColorScheme.light();
     actualDarkColorScheme = const ColorScheme.dark();
+    service = Service.spotify;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _setCustomTheme();
       _getAlbumDescription();
+      _getService();
     });
   }
 
@@ -93,11 +98,14 @@ class _MoreInfo extends State<MoreInfo> {
   bool _isSametag(String tag1, String tag2) =>
       tag1.toUpperCase() == tag2.toUpperCase();
 
-  String _displaySecondaryGenre() {
-    if (genres == [""]) {
-      return '';
-    }
-    return genres[0];
+  void _getService() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int serviceIndex = prefs.getInt('service') ?? 0;
+    final Service usedService = Service.values[serviceIndex];
+
+    setState(() {
+      service = usedService;
+    });
   }
 
   @override
@@ -186,7 +194,7 @@ class _MoreInfo extends State<MoreInfo> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(24)),
                         child: Hero(
-                          tag: album.name,
+                          tag: album.cover,
                           child: Image.network(album.cover),
                         ),
                       )
@@ -208,10 +216,7 @@ class _MoreInfo extends State<MoreInfo> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                      top: 6.0,
-                      bottom: 16.0
-                    ),
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: Text(
                       album.artist,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -229,13 +234,12 @@ class _MoreInfo extends State<MoreInfo> {
                       top: 8.0,
                       bottom: 32.0,
                       right: 10.0,
-                      left: 10.0
+                      left: 10.0,
                     ),
                     child: MarkdownBody(
                       data: albumDescription,
-                      styleSheet: MarkdownStyleSheet(
-                        textAlign: WrapAlignment.start
-                      ),
+                      styleSheet:
+                          MarkdownStyleSheet(textAlign: WrapAlignment.start),
                       selectable: true,
                       onTapLink: (text, url, title) {
                         launchUrl(Uri.parse(url!));
@@ -244,6 +248,24 @@ class _MoreInfo extends State<MoreInfo> {
                   )
                 ],
               ),
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+
+            onPressed: () async {
+              String initialUrl = service.searchUrl;
+              String url =
+                  Uri.encodeFull('$initialUrl${album.name} - ${album.artist}');
+              final uri = Uri.parse(url);
+              if (!await launchUrl(uri)) {
+                throw Exception('Could not launch $uri');
+              }
+            },
+            child: SvgPicture.asset(
+              service.iconPath,
+              color: theme.colorScheme.onPrimaryContainer,
+              width: 24,
+              height: 24,
             ),
           ),
         ),
