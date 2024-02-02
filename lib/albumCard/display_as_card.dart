@@ -4,7 +4,6 @@ import 'package:cradle/rym_snackbar.dart';
 import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../moreInfoMenu.dart';
@@ -13,6 +12,8 @@ class DisplayAlbumAsCard extends DisplayAlbum {
   late Album album;
   late DateTime date;
   Uri _url = Uri.parse('https://flutter.dev');
+
+  Service currentService = Service.spotify;
 
   DisplayAlbumAsCard({super.key, required this.album, required this.date}) {
     const String initialUrl = "https://open.spotify.com/search/";
@@ -33,7 +34,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
         const SizedBox(height: 16),
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width - 32,
+              width: 352,
               height: 425,
               child: Card(
                   elevation: (dateIsToday(date)) ? 1 : 0,
@@ -168,34 +169,26 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                     MoreInfoMenu(
                                       album: album,
                                     ),
-
-                                    // new Spacer(),
-
-                                    Consumer<ServiceNotifier>(builder:
-                                        (context, serviceNotifier, child) {
-                                      return FilledButton.icon(
-                                        icon: SvgPicture.asset(
-                                          serviceNotifier
-                                              .currentService.iconPath,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          width: 18,
-                                          height: 18,
-                                        ),
-                                        onPressed: () {
-                                          String initialUrl = serviceNotifier
-                                              .currentService.searchUrl;
-                                          String url = Uri.encodeFull(
-                                              '$initialUrl${album.name} - ${album.artist}');
-                                          _url = Uri.parse(url);
-                                          _launchUrl();
-                                        },
-                                        label: Text(
-                                          "Listen on ${serviceNotifier.currentService.fullName}",
-                                        ),
-                                      );
-                                    })
+                                    FilledButton.icon(
+                                      icon: SvgPicture.asset(
+                                        currentService.iconPath,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        width: 18,
+                                        height: 18,
+                                      ),
+                                      onPressed: () {
+                                        String initialUrl = currentService.searchUrl;
+                                        String url = Uri.encodeFull(
+                                            '$initialUrl${album.name} - ${album.artist}');
+                                        _url = Uri.parse(url);
+                                        _launchUrl();
+                                      },
+                                      label: Text(
+                                        "Listen on ${currentService.fullName}",
+                                      ),
+                                    ),
                                   ],
                                 ),
                               )

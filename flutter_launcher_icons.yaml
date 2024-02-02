@@ -30,3 +30,4 @@ flutter_launcher_icons:
 
   linux:
     generate: true
+    image_path: "assets/icon/icon.png"

@@ -9,10 +9,10 @@ Future<XFile> getImageXFileByUrl(String url) async {
 }
 
 void shareAlbum(Album album) async {
-  //Share.share('Hey, check out ${album.name} by ${album.artist}! \n This album was discovered using Cradle: https://github.com/apoleon33/cradle.');
   Share.shareXFiles(
     [await getImageXFileByUrl(album.cover)],
     text:
-        'Hey, check out ${album.name} by ${album.artist}! \n This album was discovered using Cradle: https://github.com/apoleon33/cradle.',
+    'Hey, check out ${album.name} by ${album
+        .artist}! \n This album was discovered using Cradle: https://github.com/apoleon33/cradle.',
   );
 }

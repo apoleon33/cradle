@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cradle/navigation.dart';
 import 'package:cradle/route/settings.dart';
 import 'package:cradle/services.dart';
@@ -8,6 +10,7 @@ import 'albumCard.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -32,6 +35,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ];
 
+    int keyCount = 1;
+
     DateTime deadline = DateTime.parse('2023-12-31');
 
     // formatting so that it looks like 'year-month-day'
@@ -52,8 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
       albumCards.add(AlbumCard(
         date: date,
         isCard: isCard,
-        key: ValueKey(DateTime.now()),
+        key: ValueKey(keyCount),
       ));
+      keyCount++;
     }
 
     setState(() {
@@ -69,12 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  callBack(int index) {
-    setState(() {
-      indexPage = index;
-    });
-  }
-
   Future _refreshData() async {
     _createAlbumList();
   }
@@ -84,49 +84,51 @@ class _MyHomePageState extends State<MyHomePage> {
     _createAlbumList();
     List<Widget> albumCards = albumList;
 
-    return ChangeNotifierProvider(
-      create: (context) => ServiceNotifier(),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          title: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                widget.title,
-                style: const TextStyle(fontFamily: 'Cloister', fontSize: 24.0),
-              )),
-          actions: (indexPage == 0)
-              ? [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isCard = !isCard;
-                      });
-                    },
-                    icon: (!isCard)
-                        ? const Icon(Icons.view_list)
-                        : const Icon(Icons.grid_view),
-                  )
-                ]
-              : [],
-        ),
-        body: RefreshIndicator(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              widget.title,
+              style: const TextStyle(fontFamily: 'Cloister', fontSize: 24.0),
+            )),
+        actions: (indexPage == 0)
+            ? [
+                IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      isCard = !isCard;
+                    });
+                  },
+                  icon: (!isCard)
+                      ? const Icon(Icons.view_list)
+                      : const Icon(Icons.grid_view),
+                )
+              ]
+            : [],
+      ),
+      body: [
+        RefreshIndicator(
           onRefresh: _refreshData,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                albumCards,
-                [const Settings()]
-              ][indexPage],
-            ),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                  child: Column(
+                children: albumCards,
+              ))
+            ],
           ),
         ),
-        bottomNavigationBar: Navigation(
-          callBack: callBack,
-          currentPageIndex: indexPage,
-        ),
+        const Settings(),
+      ][indexPage],
+      bottomNavigationBar: Navigation(
+        callBack: (int index) async {
+          setState(() {
+            indexPage = index;
+          });
+        },
+        currentPageIndex: indexPage,
       ),
     );
   }

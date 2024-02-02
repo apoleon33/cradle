@@ -16,20 +16,20 @@ class DynamicTheme extends StatefulWidget {
 }
 
 class _DynamicTheme extends State<DynamicTheme> {
-  late ColorScheme currentColorScheme;
-  late ColorScheme currentDarkColorScheme;
-  late int themeMode;
+  ColorScheme currentColorScheme = const ColorScheme.light();
+  ColorScheme currentDarkColorScheme = const ColorScheme.dark();
+  int themeMode = 0;
 
   @override
   void initState() {
     super.initState();
     _getTodayImage();
-    currentColorScheme = const ColorScheme.light();
-    currentDarkColorScheme = const ColorScheme.dark();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      createTheme(widget.image);
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        createTheme(widget.image);
 
-      _getThemeModeFromSettings();
+        _getThemeModeFromSettings();
+      });
     });
   }
 
@@ -63,8 +63,6 @@ class _DynamicTheme extends State<DynamicTheme> {
       (lastfmCover == null) ? result.cover : lastfmCover,
     );
 
-    print((lastfmCover == null) ? result.cover : lastfmCover);
-
     createTheme(widget.image);
   }
 
@@ -75,17 +73,18 @@ class _DynamicTheme extends State<DynamicTheme> {
     return Consumer<ModeTheme>(
       builder: (context, modeTheme, child) {
         return MaterialApp(
-            title: 'Cradle',
-            theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-            darkTheme:
-                ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-            themeMode: (modeTheme.themeMode == 0)
-                ? ThemeMode.system
-                : (modeTheme.themeMode == 1)
-                    ? ThemeMode.light
-                    : ThemeMode.dark,
-            debugShowCheckedModeBanner: false,
-            home: widget.child);
+          title: 'Cradle',
+          theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+          darkTheme:
+              ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+          themeMode: (modeTheme.themeMode == 0)
+              ? ThemeMode.system
+              : (modeTheme.themeMode == 1)
+                  ? ThemeMode.light
+                  : ThemeMode.dark,
+          debugShowCheckedModeBanner: true, // easier to know which version im running
+          home: widget.child,
+        );
       },
     );
   }
