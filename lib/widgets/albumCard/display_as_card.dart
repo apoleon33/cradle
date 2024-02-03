@@ -34,7 +34,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
         const SizedBox(height: 16),
         Center(
           child: SizedBox(
-              width: 352,
+              width: MediaQuery.of(context).size.width - 32,
               height: 425,
               child: Card(
                   elevation: (dateIsToday(date)) ? 1 : 0,
