@@ -4,7 +4,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 Future<XFile> getImageXFileByUrl(String url) async {
   var file = await DefaultCacheManager().getSingleFile(url);
-  XFile result = await XFile(file.path);
+  XFile result = XFile(file.path);
   return result;
 }
 

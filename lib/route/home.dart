@@ -1,10 +1,7 @@
-import 'dart:math';
 
 import 'package:cradle/navigation.dart';
 import 'package:cradle/route/settings.dart';
-import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'albumCard.dart';
 
