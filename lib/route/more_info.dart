@@ -2,7 +2,7 @@ import 'package:cradle/album.dart';
 import 'package:cradle/api/lastfm_api.dart';
 import 'package:cradle/services.dart';
 import 'package:cradle/share.dart';
-import 'package:cradle/theme_manager.dart';
+import 'package:cradle/widgets/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';

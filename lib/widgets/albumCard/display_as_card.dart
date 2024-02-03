@@ -1,6 +1,6 @@
 import 'package:cradle/album.dart';
-import 'package:cradle/albumCard/display_album.dart';
-import 'package:cradle/rym_snackbar.dart';
+import 'package:cradle/widgets/albumCard/display_album.dart';
+import 'package:cradle/widgets/rym_snackbar.dart';
 import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
