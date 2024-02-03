@@ -70,7 +70,7 @@ Available subcommands:
   - [x] group as list/as card
   - [x] ~~top left menu~~ replaced by a bottom bar
   - [x] short RYM description
-- [ ] widget
+- [ ] ~~widget~~ postponed
 - [ ] notification 1/day
 - [x] settings
   - [x] Theme mode
