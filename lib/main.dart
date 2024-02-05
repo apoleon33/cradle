@@ -1,3 +1,4 @@
+import 'package:cradle/push_notifications.dart';
 import 'package:cradle/widgets/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,9 @@ import 'route/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //initNotifications();
+  NotificationService().initNotification();
+
   runApp(const MyApp());
 }
 
