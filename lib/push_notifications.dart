@@ -1,7 +1,48 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+
+/// Class to manage both shared preferences and local notifications.
+class NotificationManagement {
+  void addPushNotification(tz.TZDateTime date) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // https://stackoverflow.com/questions/39607856/what-is-notification-id-in-android
+    int id = Random().nextInt(100);
+
+    NotificationService().scheduleNotification(id, date);
+
+    // save the notifications to be able to edit them
+    prefs.setBool('${date.year}-${date.month}-${date.day}-pushStatus', true);
+    prefs.setInt('${date.year}-${date.month}-${date.day}-id', id);
+  }
+
+  void removePushNotification(tz.TZDateTime date) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.remove('${date.year}-${date.month}-${date.day}-id');
+    final int id = prefs.getInt(
+          '${date.year}-${date.month}-${date.day}-id',
+        ) ??
+        0;
+
+    prefs.setBool('${date.year}-${date.month}-${date.day}-pushStatus', false);
+
+    await NotificationService().cancelNotification(id);
+  }
+
+  /// Return true if a notification has been scheduled for the given day.
+  Future<bool> isNotificationScheduledForThisDay(tz.TZDateTime date) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool(
+          '${date.year}-${date.month}-${date.day}-pushStatus',
+        ) ??
+        false;
+  }
+}
 
 class NotificationService {
   static final NotificationService _notificationService =
@@ -36,17 +77,20 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> showNotification(int id, String title, String body) async {
-    tz.initializeTimeZones();
+  Future<void> scheduleNotification(int id, tz.TZDateTime date) async {
     if (kDebugMode) {
       print("sending notification...");
+      print("notification scheduled for $date");
     }
+
+    String title = "🎶There is a new album!";
+    String body = "🎵 Click to see today's album.";
+
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
       body,
-      tz.TZDateTime.now(tz.local).add(const Duration(
-          seconds: 1)), //schedule the notification to show after 2 seconds.
+      date,
       const NotificationDetails(
         // Android details
         android: AndroidNotificationDetails('main_channel', 'Main Channel',
@@ -65,5 +109,9 @@ class NotificationService {
     if (kDebugMode) {
       print("notification sent!");
     }
+  }
+
+  Future<void> cancelNotification(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }
