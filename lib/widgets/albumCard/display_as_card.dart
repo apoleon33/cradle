@@ -78,35 +78,41 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                     MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 8, top: 8),
-                                    child: Text(
-                                      album.name.length > 18
-                                          ? '${album.name.substring(0, 15)}...'
-                                          : album.name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall,
-                                    ),
-                                  ),
-                                  Padding(
+                                  Flexible(
+                                    flex: 5,
+                                    child: Padding(
                                       padding: const EdgeInsets.only(
-                                          right: 8, left: 8),
+                                          left: 8, top: 8),
                                       child: Text(
-                                        (dateIsToday(date))
-                                            ? "today"
-                                            : (dateIsYesterday(date))
-                                                ? "ye"
-                                                : "${date.day}/${date.month}/${date.year}",
+                                        //album.name.length > 18
+                                        //   ? '${album.name.substring(0, 15)}...'
+                                        album.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge,
-                                        textAlign: TextAlign.right,
-                                        overflow: TextOverflow.fade,
-                                      ))
+                                            .headlineSmall,
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                      flex: 2,
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 8, left: 8),
+                                          child: Text(
+                                            (dateIsToday(date))
+                                                ? "today"
+                                                : (dateIsYesterday(date))
+                                                    ? "yesterday"
+                                                    : "${date.day}/${date.month}/${date.year}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                            textAlign: TextAlign.right,
+                                            overflow: TextOverflow.fade,
+                                            maxLines: 1,
+                                          )))
                                 ],
                               ),
                               Row(
