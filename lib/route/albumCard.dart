@@ -1,6 +1,7 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/api/cradle_api.dart';
 import 'package:cradle/api/lastfm_api.dart';
+import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cradle/widgets/albumCard/display_as_card.dart';
@@ -26,13 +27,26 @@ class _AlbumCardState extends State<AlbumCard> {
   String genre = "genre";
   double averageRating = 5.0;
 
+  Service currentService = Service.spotify;
+
   @override
   void initState() {
     super.initState();
     date = widget.date;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _getAlbumByDate();
+      _getCurrentService();
     });
+  }
+
+  void _getCurrentService() async {
+    final prefs = await SharedPreferences.getInstance();
+    int serviceNumber = prefs.getInt('service') ?? 0;
+    if (mounted) {
+      setState(() {
+        currentService = Service.values[serviceNumber];
+      });
+    }
   }
 
   void _getAlbumByDate() async {
@@ -111,11 +125,12 @@ class _AlbumCardState extends State<AlbumCard> {
       genre: genre,
       averageRating: averageRating,
     );
+
     return widget.isCard
         ? DisplayAlbumAsCard(
             album: album,
             date: date,
-            key: ValueKey(album),
+            service: currentService,
           )
         : DisplayAsList(
             key: ValueKey(album),

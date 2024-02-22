@@ -4,6 +4,7 @@ import 'package:cradle/widgets/rym_snackbar.dart';
 import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../moreInfoMenu.dart';
@@ -11,11 +12,14 @@ import '../moreInfoMenu.dart';
 class DisplayAlbumAsCard extends DisplayAlbum {
   late Album album;
   late DateTime date;
+  late Service service;
   Uri _url = Uri.parse('https://flutter.dev');
 
-  Service currentService = Service.spotify;
-
-  DisplayAlbumAsCard({super.key, required this.album, required this.date}) {
+  DisplayAlbumAsCard(
+      {super.key,
+      required this.album,
+      required this.date,
+      required this.service}) {
     const String initialUrl = "https://open.spotify.com/search/";
     String url = Uri.encodeFull('$initialUrl${album.name} - ${album.artist}');
     _url = Uri.parse(url);
@@ -72,6 +76,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Padding(
                                     padding:
@@ -81,6 +86,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                           ? '${album.name.substring(0, 15)}...'
                                           : album.name,
                                       maxLines: 1,
+                                      overflow: TextOverflow.fade,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineSmall,
@@ -93,12 +99,13 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                         (dateIsToday(date))
                                             ? "today"
                                             : (dateIsYesterday(date))
-                                                ? "yesterday"
+                                                ? "ye"
                                                 : "${date.day}/${date.month}/${date.year}",
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge,
                                         textAlign: TextAlign.right,
+                                        overflow: TextOverflow.fade,
                                       ))
                                 ],
                               ),
@@ -171,7 +178,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                     ),
                                     FilledButton.icon(
                                       icon: SvgPicture.asset(
-                                        currentService.iconPath,
+                                        service.iconPath,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onPrimary,
@@ -179,14 +186,14 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                         height: 18,
                                       ),
                                       onPressed: () {
-                                        String initialUrl = currentService.searchUrl;
+                                        String initialUrl = service.searchUrl;
                                         String url = Uri.encodeFull(
                                             '$initialUrl${album.name} - ${album.artist}');
                                         _url = Uri.parse(url);
                                         _launchUrl();
                                       },
                                       label: Text(
-                                        "Listen on ${currentService.fullName}",
+                                        "Listen on ${service.fullName}",
                                       ),
                                     ),
                                   ],
