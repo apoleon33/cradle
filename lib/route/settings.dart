@@ -1,3 +1,4 @@
+import 'package:cradle/route/settings/notifications_settings.dart';
 import 'package:cradle/route/settings/service_settings.dart';
 import 'package:cradle/route/settings/theme_mode_settings.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,12 @@ class _Settings extends State<Settings> {
             icon: Icons.music_note,
             name: "Default music provider",
             page: const ServiceSetting(),
-          )
+          ),
+          SettingButton(
+            icon: Icons.notifications,
+            name: "Push notifications",
+            page: const NotificationSetting(),
+          ),
         ],
       ),
     );
