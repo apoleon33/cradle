@@ -71,7 +71,7 @@ Available subcommands:
   - [x] ~~top left menu~~ replaced by a bottom bar
   - [x] short RYM description
 - [ ] ~~widget~~ postponed
-- [ ] notification 1/day
+- [ ] ~~notification 1/day~~ postponed
 - [x] settings
   - [x] Theme mode
   - [x] change music provider
