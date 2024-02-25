@@ -1,6 +1,6 @@
-
 import 'package:cradle/widgets/navigation.dart';
 import 'package:cradle/route/settings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'albumCard.dart';
@@ -20,6 +20,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int indexPage = 0;
 
   late List<Widget> albumList;
+
+  late ScrollController _scrollController;
+  bool isBackToTopButtonShown = false;
 
   void _createAlbumList() {
     DateTime timeNow = DateTime.now();
@@ -67,13 +70,41 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    // _scrollController.addListener(() {
+    //   setState(() {
+    //     isBackToTopButtonShown = _scrollController.offset >= 400;
+    //   });
+    // });
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _createAlbumList();
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
+    if (kDebugMode) {
+      print("successfully scrolled up to the top!");
+    }
+  }
+
   Future _refreshData() async {
     _createAlbumList();
+  }
+
+  void _changeView() async {
+    _scrollToTop();
+    setState(() {
+      isCard = !isCard;
+    });
   }
 
   @override
@@ -86,18 +117,20 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              widget.title,
-              style: const TextStyle(fontFamily: 'Cloister', fontSize: 24.0),
-            )),
+            child: TextButton(
+                onPressed: _scrollToTop,
+                child: Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontFamily: 'Cloister',
+                    fontSize: 24.0,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                ))),
         actions: (indexPage == 0)
             ? [
                 IconButton(
-                  onPressed: () async {
-                    setState(() {
-                      isCard = !isCard;
-                    });
-                  },
+                  onPressed: _changeView,
                   icon: (!isCard)
                       ? const Icon(Icons.view_list)
                       : const Icon(Icons.grid_view),
@@ -109,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
         RefreshIndicator(
           onRefresh: _refreshData,
           child: CustomScrollView(
+            controller: _scrollController,
             slivers: [
               SliverToBoxAdapter(
                   child: Column(
