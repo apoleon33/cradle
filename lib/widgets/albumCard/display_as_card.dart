@@ -1,4 +1,5 @@
 import 'package:cradle/album.dart';
+import 'package:cradle/route/more_info.dart';
 import 'package:cradle/widgets/albumCard/display_album.dart';
 import 'package:cradle/widgets/rym_snackbar.dart';
 import 'package:cradle/services.dart';
@@ -37,12 +38,20 @@ class DisplayAlbumAsCard extends DisplayAlbum {
       children: [
         const SizedBox(height: 16),
         Center(
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width - 32,
-              height: 425,
-              child: Card(
-                  elevation: (dateIsToday(date)) ? 1 : 0,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+            child: SizedBox(
+          width: MediaQuery.of(context).size.width - 32,
+          height: 425,
+          child: Card(
+              elevation: (dateIsToday(date)) ? 1 : 0,
+              color: Theme.of(context).colorScheme.surfaceVariant,
+              child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MoreInfo(album: album),
+                        ));
+                  },
                   child: Column(
                     children: [
                       Expanded(
@@ -209,7 +218,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                           ))
                     ],
                   ))),
-        ),
+        )),
       ],
     );
   }
