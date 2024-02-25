@@ -1,3 +1,4 @@
+import 'package:cradle/route/settings/about_settings.dart';
 import 'package:cradle/route/settings/notifications_settings.dart';
 import 'package:cradle/route/settings/service_settings.dart';
 import 'package:cradle/route/settings/theme_mode_settings.dart';
@@ -60,6 +61,11 @@ class _Settings extends State<Settings> {
             icon: Icons.notifications,
             name: "Push notifications",
             page: const NotificationSetting(),
+          ),
+          SettingButton(
+            icon: Icons.info,
+            name: "About",
+            page: const AboutSettings(),
           ),
         ],
       ),
