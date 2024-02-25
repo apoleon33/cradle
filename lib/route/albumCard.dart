@@ -9,10 +9,10 @@ import 'package:cradle/widgets/albumCard/display_as_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AlbumCard extends StatefulWidget {
-  late DateTime date;
-  bool isCard;
+  final DateTime date;
+  final bool isCard;
 
-  AlbumCard({super.key, required this.date, required this.isCard});
+  const AlbumCard({super.key, required this.date, required this.isCard});
 
   @override
   State<AlbumCard> createState() => _AlbumCardState();

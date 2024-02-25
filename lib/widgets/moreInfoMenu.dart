@@ -4,9 +4,9 @@ import 'package:cradle/share.dart';
 import 'package:flutter/material.dart';
 
 class MoreInfoMenu extends StatelessWidget {
-  Album album;
+  final Album album;
 
-  MoreInfoMenu({super.key, required this.album});
+  const MoreInfoMenu({super.key, required this.album});
 
   @override
   Widget build(BuildContext context) {

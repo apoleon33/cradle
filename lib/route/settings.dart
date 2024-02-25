@@ -44,28 +44,28 @@ class _Settings extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         children: [
           SettingButton(
             icon: Icons.settings_brightness,
             name: "Theme Mode",
-            page: const ThemeModeSetting(),
+            page: ThemeModeSetting(),
           ),
           SettingButton(
             icon: Icons.music_note,
             name: "Default music provider",
-            page: const ServiceSetting(),
+            page: ServiceSetting(),
           ),
           SettingButton(
             icon: Icons.notifications,
             name: "Push notifications",
-            page: const NotificationSetting(),
+            page: NotificationSetting(),
           ),
           SettingButton(
             icon: Icons.info,
             name: "About",
-            page: const AboutSettings(),
+            page: AboutSettings(),
           ),
         ],
       ),
@@ -74,11 +74,11 @@ class _Settings extends State<Settings> {
 }
 
 class SettingButton extends StatelessWidget {
-  IconData icon;
-  String name;
-  Widget page;
+  final IconData icon;
+  final String name;
+  final Widget page;
 
-  SettingButton({
+  const SettingButton({
     super.key,
     required this.icon,
     required this.name,

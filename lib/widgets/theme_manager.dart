@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DynamicTheme extends StatefulWidget {
-  Widget child;
+  final Widget child;
   ImageProvider image = const AssetImage("assets/default.png");
 
   DynamicTheme({super.key, required this.child});

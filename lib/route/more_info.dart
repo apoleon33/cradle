@@ -12,9 +12,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreInfo extends StatefulWidget {
-  Album album;
+  final Album album;
 
-  MoreInfo({super.key, required this.album});
+  const MoreInfo({super.key, required this.album});
 
   @override
   State<StatefulWidget> createState() => _MoreInfo();

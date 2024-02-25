@@ -5,15 +5,14 @@ import 'package:cradle/widgets/rym_snackbar.dart';
 import 'package:cradle/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../moreInfoMenu.dart';
 
 class DisplayAlbumAsCard extends DisplayAlbum {
-  late Album album;
-  late DateTime date;
-  late Service service;
+  final Album album;
+  final DateTime date;
+  final Service service;
   Uri _url = Uri.parse('https://flutter.dev');
 
   DisplayAlbumAsCard(
