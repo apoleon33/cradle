@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    schedulePushNotifications();
+    // schedulePushNotifications();
 
     return ChangeNotifierProvider(
       create: (context) => ModeTheme(),
