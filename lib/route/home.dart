@@ -39,12 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     int keyCount = 1;
 
-    bool deadlineIs30DaysAgo = deadline.isBefore(
-      timeNow.subtract(
-        const Duration(days: 30),
-      ),
-    );
-
     // formatting so that it looks like 'year-month-day'
     String formattedDate = '${timeNow.year}-';
     if (timeNow.month < 10) {
@@ -68,16 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
       keyCount++;
     }
 
-    if (deadline.isAfter(DateTime.parse('2023-12-31'))) {
-      albumCards.add(
-        FilledButton.icon(
-          onPressed: upgradeDeadline,
-          label: const Text("Load more albums"),
-          icon: const Icon(Icons.post_add),
-        ),
-      );
-    }
-
     setState(() {
       albumList = albumCards;
     });
@@ -90,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .isBefore(DateTime.parse('2023-12-31'))) {
       newDeadline = DateTime.parse('2023-12-31');
     } else {
-      newDeadline = deadline.subtract(const Duration(days: 30));
+      newDeadline = deadline.subtract(const Duration(days: 15));
     }
 
     if (kDebugMode) {
@@ -109,11 +93,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _scrollController = ScrollController();
     albumList = [];
-    // _scrollController.addListener(() {
-    //   setState(() {
-    //     isBackToTopButtonShown = _scrollController.offset >= 400;
-    //   });
-    // });
+     _scrollController.addListener(() {
+       if (_scrollController.position.atEdge){
+         if (_scrollController.position.pixels != 0) upgradeDeadline();
+       }
+    });
 
     deadline = DateTime.now().subtract(const Duration(days: 30));
 
