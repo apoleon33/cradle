@@ -23,8 +23,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late ScrollController _scrollController;
   bool isBackToTopButtonShown = false;
+  DateTime deadline = DateTime.parse('2023-12-31');
 
   void _createAlbumList() {
+    if (kDebugMode) print("deadline: ${deadline}");
     DateTime timeNow = DateTime.now();
     List<Widget> albumCards = [
       AlbumCard(
@@ -37,7 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     int keyCount = 1;
 
-    DateTime deadline = DateTime.parse('2023-12-31');
+    bool deadlineIs30DaysAgo = deadline.isBefore(
+      timeNow.subtract(
+        const Duration(days: 30),
+      ),
+    );
 
     // formatting so that it looks like 'year-month-day'
     String formattedDate = '${timeNow.year}-';
@@ -62,20 +68,54 @@ class _MyHomePageState extends State<MyHomePage> {
       keyCount++;
     }
 
+    if (deadline.isAfter(DateTime.parse('2023-12-31'))) {
+      albumCards.add(
+        FilledButton.icon(
+          onPressed: upgradeDeadline,
+          label: const Text("Load more albums"),
+          icon: const Icon(Icons.post_add),
+        ),
+      );
+    }
+
     setState(() {
       albumList = albumCards;
     });
+  }
+
+  void upgradeDeadline() {
+    DateTime newDeadline = deadline;
+    if (deadline
+        .subtract(const Duration(days: 30))
+        .isBefore(DateTime.parse('2023-12-31'))) {
+      newDeadline = DateTime.parse('2023-12-31');
+    } else {
+      newDeadline = deadline.subtract(const Duration(days: 30));
+    }
+
+    if (kDebugMode) {
+      print(newDeadline);
+      print(deadline);
+    }
+
+    int key = 1;
+    deadline = newDeadline;
+    albumList.removeLast(); // remove button
+     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    albumList = [];
     // _scrollController.addListener(() {
     //   setState(() {
     //     isBackToTopButtonShown = _scrollController.offset >= 400;
     //   });
     // });
+
+    deadline = DateTime.now().subtract(const Duration(days: 30));
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _createAlbumList();
@@ -91,9 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _scrollToTop() {
     _scrollController.animateTo(0,
         duration: const Duration(seconds: 1), curve: Curves.easeInOutQuart);
-    if (kDebugMode) {
-      print("successfully scrolled up to the top!");
-    }
+    if (kDebugMode) print("successfully scrolled up to the top!");
   }
 
   Future _refreshData() async {
@@ -109,9 +147,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _createAlbumList();
-    List<Widget> albumCards = albumList;
+    if (kDebugMode){
+      print(isCard);
+    }
 
+    _createAlbumList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -146,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
             slivers: [
               SliverToBoxAdapter(
                   child: Column(
-                children: albumCards,
+                children: albumList,
               ))
             ],
           ),
