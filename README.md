@@ -81,3 +81,7 @@ Available subcommands:
 - [x] Material app logo
 - [x] github banner on settings
 - [ ] better large screen handling
+- [ ] listened to/ not listened to button
+- [ ] new icon
+- [ ] banner on readme
+- [ ] put images in cache
