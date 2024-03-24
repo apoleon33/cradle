@@ -42,9 +42,9 @@ class DisplayAsList extends DisplayAlbum {
           isThreeLine: false,
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MoreInfo(album: album)));
+              context,
+              createRoute(MoreInfo(album: album)),
+            );
           },
         ),
         const Divider(indent: 16.0, endIndent: 16.0),

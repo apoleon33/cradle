@@ -46,10 +46,8 @@ class DisplayAlbumAsCard extends DisplayAlbum {
               child: InkWell(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MoreInfo(album: album),
-                        ));
+                      context, createRoute(MoreInfo(album: album)),
+                    );
                   },
                   child: Column(
                     children: [
