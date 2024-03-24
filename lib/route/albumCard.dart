@@ -126,6 +126,8 @@ class _AlbumCardState extends State<AlbumCard> {
       averageRating: averageRating,
     );
 
+    precacheImage(NetworkImage(album.cover), context);
+
     return widget.isCard
         ? DisplayAlbumAsCard(
             album: album,
