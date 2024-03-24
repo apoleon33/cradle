@@ -85,3 +85,4 @@ Available subcommands:
 - [ ] new icon
 - [ ] banner on readme
 - [ ] put images in cache
+- [ ] one single per day too
