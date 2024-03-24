@@ -37,8 +37,12 @@ class _MoreInfo extends State<MoreInfo> {
     album = widget.album;
     albumDescription = "";
     genres = [""];
-    actualColorScheme = const ColorScheme.light();
-    actualDarkColorScheme = const ColorScheme.dark();
+    actualColorScheme = const ColorScheme.light().copyWith(
+      secondaryContainer: const ColorScheme.light().background  ,
+    );
+    actualDarkColorScheme = const ColorScheme.dark().copyWith(
+      secondaryContainer: const ColorScheme.dark().background,
+    );
     service = Service.spotify;
 
     scrollController.addListener(() {
@@ -122,14 +126,10 @@ class _MoreInfo extends State<MoreInfo> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context).copyWith(
-      colorScheme: (Theme
-          .of(context)
-          .brightness == Brightness.dark)
+      colorScheme: (Theme.of(context).brightness == Brightness.dark)
           ? actualDarkColorScheme
           : actualColorScheme,
-      brightness: Theme
-          .of(context)
-          .brightness,
+      brightness: Theme.of(context).brightness,
     );
 
     List<Widget> tagsList = [
@@ -180,13 +180,9 @@ class _MoreInfo extends State<MoreInfo> {
             title: Text(
               (isNameHidden) ? album.name : "",
               overflow: TextOverflow.ellipsis,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(
-                color: theme.colorScheme.onSecondaryContainer,
-              ),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
             ),
             actions: [
               IconButton(
@@ -212,15 +208,14 @@ class _MoreInfo extends State<MoreInfo> {
                     children: [
                       ClipRRect(
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(24)),
+                              const BorderRadius.all(Radius.circular(24)),
                           child: Card(
-                              elevation: 2.0,
-                              child: Hero(
-                                tag: album.cover,
-                                child: Image.network(album.cover),
-                              ),
-                          )
-                      )
+                            elevation: 2.0,
+                            child: Hero(
+                              tag: album.cover,
+                              child: Image.network(album.cover),
+                            ),
+                          ))
                     ],
                   ),
                   Padding(
@@ -230,13 +225,9 @@ class _MoreInfo extends State<MoreInfo> {
                     child: Text(
                       album.name,
                       style:
-                      Theme
-                          .of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(
-                        color: theme.colorScheme.onSecondaryContainer,
-                      ),
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: theme.colorScheme.onSecondaryContainer,
+                              ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       textAlign: TextAlign.center,
@@ -246,13 +237,9 @@ class _MoreInfo extends State<MoreInfo> {
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: Text(
                       album.artist,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(
-                        color: theme.colorScheme.onSecondaryContainer,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: theme.colorScheme.onSecondaryContainer,
+                          ),
                     ),
                   ),
                   Wrap(
@@ -270,7 +257,7 @@ class _MoreInfo extends State<MoreInfo> {
                     child: MarkdownBody(
                       data: albumDescription,
                       styleSheet:
-                      MarkdownStyleSheet(textAlign: WrapAlignment.start),
+                          MarkdownStyleSheet(textAlign: WrapAlignment.start),
                       selectable: true,
                       onTapLink: (text, url, title) {
                         launchUrl(Uri.parse(url!));
@@ -285,7 +272,7 @@ class _MoreInfo extends State<MoreInfo> {
             onPressed: () async {
               String initialUrl = service.searchUrl;
               String url =
-              Uri.encodeFull('$initialUrl${album.name} - ${album.artist}');
+                  Uri.encodeFull('$initialUrl${album.name} - ${album.artist}');
               final uri = Uri.parse(url);
               if (!await launchUrl(uri)) {
                 throw Exception('Could not launch $uri');
