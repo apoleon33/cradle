@@ -1,6 +1,4 @@
-# cradle
-
-One album per day
+<img src="https://github.com/apoleon33/cradle/blob/master/doc/banner.png" width=512 height="250" align="center">
 
 # Install
 > No bins are available for the moment, so please build it by [yourself](#build-the-app).
