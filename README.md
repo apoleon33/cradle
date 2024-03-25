@@ -1,4 +1,6 @@
-<img src="https://github.com/apoleon33/cradle/blob/master/doc/banner.png" width=512 height="250" align="center">
+<p align="center">
+<img src="https://github.com/apoleon33/cradle/blob/master/doc/banner.png" width=512 height="250">
+</p>
 
 # Install
 > No bins are available for the moment, so please build it by [yourself](#build-the-app).
