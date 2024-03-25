@@ -82,7 +82,7 @@ Available subcommands:
 - [x] github banner on settings
 - [ ] better large screen handling
 - [ ] listened to/ not listened to button
-- [ ] new icon
-- [ ] banner on readme
-- [ ] put images in cache
+- [x] new icon
+- [x] banner on readme
+- [x] put images in cache
 - [ ] one single per day too
