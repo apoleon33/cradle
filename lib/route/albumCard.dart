@@ -58,6 +58,7 @@ class _AlbumCardState extends State<AlbumCard> {
     Album result = await _getAlbumFromCache(date);
 
     if (mounted) {
+      precacheImage(NetworkImage(result.cover), context);
       setState(() {
         cover = result.cover;
         name = result.name;
@@ -125,8 +126,6 @@ class _AlbumCardState extends State<AlbumCard> {
       genre: genre,
       averageRating: averageRating,
     );
-
-    precacheImage(NetworkImage(album.cover), context);
 
     return widget.isCard
         ? DisplayAlbumAsCard(

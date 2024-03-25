@@ -59,7 +59,7 @@ class _MoreInfo extends State<MoreInfo> {
     });
   }
 
-  void _setCustomTheme() async {
+  Future<void> _setCustomTheme() async {
     final ColorScheme newColorScheme = await ColorScheme.fromImageProvider(
       provider: NetworkImage(album.cover),
       brightness: Brightness.light,
@@ -76,7 +76,7 @@ class _MoreInfo extends State<MoreInfo> {
     });
   }
 
-  void _getAlbumDescription() async {
+  Future<void> _getAlbumDescription() async {
     LastFmApi api = LastFmApi();
     Map result = await api.getAlbum(album);
 
@@ -113,14 +113,12 @@ class _MoreInfo extends State<MoreInfo> {
   bool _isSametag(String tag1, String tag2) =>
       tag1.toUpperCase() == tag2.toUpperCase();
 
-  void _getService() async {
+  Future<void> _getService() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final int serviceIndex = prefs.getInt('service') ?? 0;
     final Service usedService = Service.values[serviceIndex];
 
-    setState(() {
-      service = usedService;
-    });
+    service = usedService;
   }
 
   @override
