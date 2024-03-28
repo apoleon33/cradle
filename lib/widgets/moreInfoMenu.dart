@@ -18,7 +18,11 @@ class MoreInfoMenu extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MoreInfo(album: album),
+                builder: (context) => MoreInfo(
+                  album: album,
+                  lightColorScheme: const ColorScheme.light(),
+                  darkColorScheme: const ColorScheme.dark(),
+                ),
               ));
         },
       ),

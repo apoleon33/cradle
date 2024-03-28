@@ -14,7 +14,10 @@ import 'package:url_launcher/url_launcher.dart';
 class MoreInfo extends StatefulWidget {
   final Album album;
 
-  const MoreInfo({super.key, required this.album});
+  final ColorScheme lightColorScheme;
+  final ColorScheme darkColorScheme;
+  const MoreInfo(
+      {super.key, required this.album, required this.lightColorScheme, required this.darkColorScheme});
 
   @override
   State<StatefulWidget> createState() => _MoreInfo();
@@ -38,7 +41,7 @@ class _MoreInfo extends State<MoreInfo> {
     albumDescription = "";
     genres = [""];
     actualColorScheme = const ColorScheme.light().copyWith(
-      secondaryContainer: const ColorScheme.light().background  ,
+      secondaryContainer: const ColorScheme.light().background,
     );
     actualDarkColorScheme = const ColorScheme.dark().copyWith(
       secondaryContainer: const ColorScheme.dark().background,
@@ -53,26 +56,8 @@ class _MoreInfo extends State<MoreInfo> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _setCustomTheme();
       _getAlbumDescription();
       _getService();
-    });
-  }
-
-  Future<void> _setCustomTheme() async {
-    final ColorScheme newColorScheme = await ColorScheme.fromImageProvider(
-      provider: NetworkImage(album.cover),
-      brightness: Brightness.light,
-    );
-
-    final ColorScheme newDarkScheme = await ColorScheme.fromImageProvider(
-      provider: NetworkImage(album.cover),
-      brightness: Brightness.dark,
-    );
-
-    setState(() {
-      actualColorScheme = newColorScheme;
-      actualDarkColorScheme = newDarkScheme;
     });
   }
 
@@ -125,8 +110,8 @@ class _MoreInfo extends State<MoreInfo> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context).copyWith(
       colorScheme: (Theme.of(context).brightness == Brightness.dark)
-          ? actualDarkColorScheme
-          : actualColorScheme,
+          ? widget.darkColorScheme
+          : widget.lightColorScheme,
       brightness: Theme.of(context).brightness,
     );
 

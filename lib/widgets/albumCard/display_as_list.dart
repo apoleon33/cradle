@@ -8,7 +8,16 @@ class DisplayAsList extends DisplayAlbum {
   Album album;
   DateTime date;
 
-  DisplayAsList({super.key, required this.album, required this.date});
+  final ColorScheme lightColorScheme;
+  final ColorScheme darkColorScheme;
+
+  DisplayAsList({
+    super.key,
+    required this.album,
+    required this.date,
+    required this.lightColorScheme,
+    required this.darkColorScheme,
+  });
 
   @override
   Widget displayAlbum(BuildContext context) {
@@ -43,7 +52,11 @@ class DisplayAsList extends DisplayAlbum {
           onTap: () {
             Navigator.push(
               context,
-              createRoute(MoreInfo(album: album)),
+              createRoute(MoreInfo(
+                album: album,
+                lightColorScheme: lightColorScheme,
+                darkColorScheme: darkColorScheme,
+              )),
             );
           },
         ),

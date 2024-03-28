@@ -26,6 +26,8 @@ class _AlbumCardState extends State<AlbumCard> {
   String artist = "artist";
   String genre = "genre";
   double averageRating = 5.0;
+  ColorScheme lightAlbumColorScheme = const ColorScheme.light();
+  ColorScheme darkAlbumColorScheme = const ColorScheme.dark();
 
   Service currentService = Service.spotify;
 
@@ -50,21 +52,41 @@ class _AlbumCardState extends State<AlbumCard> {
   }
 
   void _getAlbumByDate() async {
-    // Dio dio = Dio();
-    // String website =
-    //     'https://cradle-api.vercel.app/album/${date.year}/${date.month}/${date.day}';
-    // Response apiCall = await dio.get(website);
-    // Map result = apiCall.data;
     Album result = await _getAlbumFromCache(date);
 
     if (mounted) {
       precacheImage(NetworkImage(result.cover), context);
+
       setState(() {
         cover = result.cover;
         name = result.name;
         artist = result.artist;
         genre = result.genre;
         averageRating = result.averageRating;
+      });
+
+      // preload color theme for the "more info" page
+      await _getAlbumColorScheme();
+    }
+  }
+
+  Future<void> _getAlbumColorScheme() async {
+    // preload color theme for the "more info" page
+    if (kDebugMode) print("getting color scheme: $cover");
+
+    final ColorScheme lightColorScheme = await ColorScheme.fromImageProvider(
+      provider: NetworkImage(cover),
+      brightness: Theme.of(context).brightness,
+    );
+    if (kDebugMode) print("got color scheme");
+
+    if (mounted) {
+      setState(() {
+        if (Theme.of(context).brightness == Brightness.light) {
+          lightAlbumColorScheme = lightColorScheme;
+        } else {
+          darkAlbumColorScheme = lightColorScheme;
+        }
       });
     }
   }
@@ -132,11 +154,15 @@ class _AlbumCardState extends State<AlbumCard> {
             album: album,
             date: date,
             service: currentService,
+            lightColorScheme: lightAlbumColorScheme,
+            darkColorScheme: darkAlbumColorScheme,
           )
         : DisplayAsList(
             key: ValueKey(album),
             album: album,
             date: date,
+            lightColorScheme: lightAlbumColorScheme,
+            darkColorScheme: darkAlbumColorScheme,
           );
   }
 }

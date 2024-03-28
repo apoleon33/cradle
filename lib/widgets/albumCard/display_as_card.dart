@@ -13,13 +13,19 @@ class DisplayAlbumAsCard extends DisplayAlbum {
   final Album album;
   final DateTime date;
   final Service service;
+
+  final ColorScheme lightColorScheme;
+  final ColorScheme darkColorScheme;
   Uri _url = Uri.parse('https://flutter.dev');
 
-  DisplayAlbumAsCard(
-      {super.key,
-      required this.album,
-      required this.date,
-      required this.service}) {
+  DisplayAlbumAsCard({
+    super.key,
+    required this.album,
+    required this.date,
+    required this.service,
+    required this.lightColorScheme,
+    required this.darkColorScheme,
+  }) {
     const String initialUrl = "https://open.spotify.com/search/";
     String url = Uri.encodeFull('$initialUrl${album.name} - ${album.artist}');
     _url = Uri.parse(url);
@@ -46,7 +52,12 @@ class DisplayAlbumAsCard extends DisplayAlbum {
               child: InkWell(
                   onTap: () {
                     Navigator.push(
-                      context, createRoute(MoreInfo(album: album)),
+                      context,
+                      createRoute(MoreInfo(
+                        album: album,
+                        lightColorScheme: lightColorScheme,
+                        darkColorScheme: darkColorScheme,
+                      )),
                     );
                   },
                   child: Column(
