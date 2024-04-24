@@ -2,6 +2,7 @@ import 'package:cradle/album.dart';
 import 'package:cradle/api/cradle_api.dart';
 import 'package:cradle/api/lastfm_api.dart';
 import 'package:cradle/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cradle/widgets/albumCard/display_as_card.dart';
@@ -36,9 +37,9 @@ class _AlbumCardState extends State<AlbumCard> {
     super.initState();
     date = widget.date;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _getAlbumByDate();
       _getCurrentService();
     });
+    _getAlbumByDate();
   }
 
   void _getCurrentService() async {
@@ -66,7 +67,7 @@ class _AlbumCardState extends State<AlbumCard> {
       });
 
       // preload color theme for the "more info" page
-      await _getAlbumColorScheme();
+      _getAlbumColorScheme();
     }
   }
 
