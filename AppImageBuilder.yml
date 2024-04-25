@@ -1,0 +1,58 @@
+# appimage-builder recipe see https://appimage-builder.readthedocs.io for details
+script:
+  - flutter build linux --release
+  - rm -rf AppDir | true
+  - mkdir AppDir
+version: 1
+AppDir:
+  path: /home/apoleon/AndroidStudioProjects/cradle/AppDir
+  app_info:
+    id: com.cradle.app
+    name: Cradle
+    icon: utilities-terminal
+    version: 0.1.0
+    exec: cradle
+    exec_args: $@
+  after_bundle:
+    - cp build/linux/x64/release/bundle/cradle AppDir
+    - cp -r build/linux/x64/release/bundle/lib/. AppDir/lib
+    - cp -r build/linux/x64/release/bundle/data AppDir
+
+  pacman:
+    Architecture: x86_64
+    repositories:
+      core:
+        - https://mirror.rackspace.com/archlinux/$repo/os/$arch
+      extra:
+        - https://mirror.rackspace.com/archlinux/$repo/os/$arch
+    include:
+      - gtk3
+      - python # I don't know why we need but build fails without it
+      - perl # I don't know why we need but build fails without it
+  files:
+    include: [ ]
+    exclude:
+      - usr/share/man
+      - usr/share/doc/*/README.*
+      - usr/share/doc/*/changelog.*
+      - usr/share/doc/*/NEWS.*
+      - usr/share/doc/*/TODO.*
+  test:
+    fedora-30:
+      image: appimagecrafters/tests-env:fedora-30
+      command: ./AppRun
+    debian-stable:
+      image: appimagecrafters/tests-env:debian-stable
+      command: ./AppRun
+    archlinux-latest:
+      image: appimagecrafters/tests-env:archlinux-latest
+      command: ./AppRun
+    centos-7:
+      image: appimagecrafters/tests-env:centos-7
+      command: ./AppRun
+    ubuntu-xenial:
+      image: appimagecrafters/tests-env:ubuntu-xenial
+      command: ./AppRun
+AppImage:
+  arch: x86_64
+  update-information: guess
