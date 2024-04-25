@@ -1,7 +1,9 @@
 import 'package:cradle/route/settings/about_settings.dart';
+import 'package:cradle/route/settings/developer_settings.dart';
 import 'package:cradle/route/settings/notifications_settings.dart';
 import 'package:cradle/route/settings/service_settings.dart';
 import 'package:cradle/route/settings/theme_mode_settings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cradle/services.dart';
@@ -67,6 +69,13 @@ class _Settings extends State<Settings> {
             name: "About",
             page: AboutSettings(),
           ),
+          (kDebugMode)
+              ? SettingButton(
+                  icon: Icons.developer_mode,
+                  name: "Dev options",
+                  page: DeveloperSettings(),
+                )
+              : SizedBox.shrink(),
         ],
       ),
     );
