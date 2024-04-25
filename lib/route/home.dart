@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
        }
     });
 
-    deadline = DateTime.now().subtract(const Duration(days: 30));
+    deadline = DateTime.now().subtract(const Duration(days: 7));
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _createAlbumList();
