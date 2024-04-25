@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
-abstract class SettingPage extends StatelessWidget {
+class SettingPage extends StatelessWidget {
+  final List<Widget> childs;
   final String name;
-  const SettingPage({super.key, required this.name});
 
-  List<Widget> buildContent(BuildContext context);
+  const SettingPage({
+    super.key,
+    required this.name,
+    required this.childs,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
+      appBar: AppBar(
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -23,7 +27,7 @@ abstract class SettingPage extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          children: buildContent(context),
+          children: childs,
         ),
       ),
     );
