@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cradle/route/settings/abstract_settings.dart';
+import 'package:cradle/widgets/setting_page.dart';
 import 'package:flutter/material.dart';
 
 class NotificationSetting extends StatelessWidget {
