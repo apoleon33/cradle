@@ -3,7 +3,9 @@
 </p>
 
 # Install
-> No bins are available for the moment, so please build it by [yourself](#build-the-app).
+Please download the latest version [here](https://github.com/apoleon33/cradle/releases).
+
+Also if you want (or if your are on an apple product) you can build cradle by [yourself](#build-the-app).
 
 # Build instructions
 > Assuming you have flutter as well as all the sdks and toolchains working on your pc.
