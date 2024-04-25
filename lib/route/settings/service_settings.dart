@@ -1,3 +1,4 @@
+import 'package:cradle/widgets/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cradle/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,23 +28,9 @@ class _ServiceSettingState extends State<ServiceSetting> {
   @override
   Widget build(BuildContext context) {
     List<Widget> radioButtonList = createRadioTiles();
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: Text(
-          "Default music provider",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: radioButtonList,
-      ),
+    return SettingPage(
+      name: "Default music provider",
+      childs: radioButtonList,
     );
   }
 

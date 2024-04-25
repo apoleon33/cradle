@@ -1,3 +1,4 @@
+import 'package:cradle/widgets/setting_page.dart';
 import 'package:cradle/widgets/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,25 +32,9 @@ class _ThemeModeSetting extends State<ThemeModeSetting> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: Text(
-          "Theme Mode",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      ),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          buildThemeMode(),
-        ],
-      ),
+    return SettingPage(
+      name: "Theme Mode",
+      childs: [buildThemeMode()],
     );
   }
 
