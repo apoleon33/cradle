@@ -1,11 +1,17 @@
 <p align="center">
 <img src="https://github.com/apoleon33/cradle/blob/master/doc/banner.png" width=512 height="250">
 </p>
+<p align="center">
+<img alt="GitHub Release" src="https://img.shields.io/github/v/release/apoleon33/cradle?include_prereleases">
+  <img alt="GitHub License" src="https://img.shields.io/github/license/apoleon33/cradle">
+
+</p>
+
 
 # Install
 Please download the latest version [here](https://github.com/apoleon33/cradle/releases).
 
-Also if you want (or if your are on an apple product) you can build cradle by [yourself](#build-the-app).
+Also if you want (or if you have an apple product) you can build cradle by [yourself](#build-the-app).
 
 # Build instructions
 > Assuming you have flutter as well as all the sdks and toolchains working on your pc.
