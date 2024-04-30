@@ -23,20 +23,17 @@ class _DynamicTheme extends State<DynamicTheme> {
   @override
   void initState() {
     super.initState();
-    _getTodayImage();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        createTheme(widget.image);
 
-        _getThemeModeFromSettings();
-      });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      _getTodayImage();
+      _getThemeModeFromSettings();
     });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    createTheme(widget.image);
+    //createTheme(widget.image);
   }
 
   void _getThemeModeFromSettings() async {
@@ -82,7 +79,8 @@ class _DynamicTheme extends State<DynamicTheme> {
               : (modeTheme.themeMode == 1)
                   ? ThemeMode.light
                   : ThemeMode.dark,
-          debugShowCheckedModeBanner: true, // easier to know which version im running
+          debugShowCheckedModeBanner: true,
+          // easier to know which version im running
           home: widget.child,
         );
       },

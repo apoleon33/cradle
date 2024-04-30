@@ -30,29 +30,16 @@ class _AlbumCardState extends State<AlbumCard> {
   ColorScheme lightAlbumColorScheme = const ColorScheme.light();
   ColorScheme darkAlbumColorScheme = const ColorScheme.dark();
 
-  Service currentService = Service.spotify;
-
   @override
   void initState() {
     super.initState();
     date = widget.date;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _getCurrentService();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      _getAlbumByDate();
     });
-    _getAlbumByDate();
   }
 
-  void _getCurrentService() async {
-    final prefs = await SharedPreferences.getInstance();
-    int serviceNumber = prefs.getInt('service') ?? 0;
-    if (mounted) {
-      setState(() {
-        currentService = Service.values[serviceNumber];
-      });
-    }
-  }
-
-  void _getAlbumByDate() async {
+  Future<void> _getAlbumByDate() async {
     Album result = await _getAlbumFromCache(date);
 
     if (mounted) {
@@ -154,7 +141,6 @@ class _AlbumCardState extends State<AlbumCard> {
         ? DisplayAlbumAsCard(
             album: album,
             date: date,
-            service: currentService,
             lightColorScheme: lightAlbumColorScheme,
             darkColorScheme: darkAlbumColorScheme,
           )
