@@ -2,40 +2,26 @@ import 'package:cradle/album.dart';
 import 'package:cradle/route/more_info.dart';
 import 'package:cradle/widgets/albumCard/display_album.dart';
 import 'package:cradle/widgets/rym_snackbar.dart';
-import 'package:cradle/services.dart';
+import 'package:cradle/widgets/service_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../moreInfoMenu.dart';
 
 class DisplayAlbumAsCard extends DisplayAlbum {
   final Album album;
   final DateTime date;
-  final Service service;
 
   final ColorScheme lightColorScheme;
   final ColorScheme darkColorScheme;
-  Uri _url = Uri.parse('https://flutter.dev');
 
-  DisplayAlbumAsCard({
+  const DisplayAlbumAsCard({
     super.key,
     required this.album,
     required this.date,
-    required this.service,
     required this.lightColorScheme,
     required this.darkColorScheme,
-  }) {
-    const String initialUrl = "https://open.spotify.com/search/";
-    String url = Uri.encodeFull('$initialUrl${album.name} - ${album.artist}');
-    _url = Uri.parse(url);
-  }
-
-  Future<void> _launchUrl() async {
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
-    }
-  }
+  });
 
   @override
   Widget displayAlbum(BuildContext context) {
@@ -199,26 +185,7 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                                     MoreInfoMenu(
                                       album: album,
                                     ),
-                                    FilledButton.icon(
-                                      icon: SvgPicture.asset(
-                                        service.iconPath,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        width: 18,
-                                        height: 18,
-                                      ),
-                                      onPressed: () {
-                                        String initialUrl = service.searchUrl;
-                                        String url = Uri.encodeFull(
-                                            '$initialUrl${album.name} - ${album.artist}');
-                                        _url = Uri.parse(url);
-                                        _launchUrl();
-                                      },
-                                      label: Text(
-                                        "Listen on ${service.fullName}",
-                                      ),
-                                    ),
+                                    ServiceButton(album: album),
                                   ],
                                 ),
                               )
