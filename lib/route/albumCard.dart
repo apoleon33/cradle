@@ -36,13 +36,13 @@ class _AlbumCardState extends State<AlbumCard> {
   void initState() {
     super.initState();
     date = widget.date;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _getCurrentService();
+      _getAlbumByDate();
     });
-    _getAlbumByDate();
   }
 
-  void _getCurrentService() async {
+  Future<void> _getCurrentService() async {
     final prefs = await SharedPreferences.getInstance();
     int serviceNumber = prefs.getInt('service') ?? 0;
     if (mounted) {
@@ -52,7 +52,7 @@ class _AlbumCardState extends State<AlbumCard> {
     }
   }
 
-  void _getAlbumByDate() async {
+  Future<void> _getAlbumByDate() async {
     Album result = await _getAlbumFromCache(date);
 
     if (mounted) {
