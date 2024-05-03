@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
   DateTime deadline = DateTime.parse('2023-12-31');
 
   void _createAlbumList() {
-    if (kDebugMode) print("deadline: $deadline");
+    // if (kDebugMode) print("deadline: $deadline");
     DateTime timeNow = DateTime.now();
     List<Widget> albumCards = [
       AlbumCard(
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     deadline = DateTime.now().subtract(const Duration(days: 7));
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _createAlbumList();
     });
   }

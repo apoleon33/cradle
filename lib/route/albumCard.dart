@@ -60,13 +60,13 @@ class _AlbumCardState extends State<AlbumCard> {
 
   Future<void> _getAlbumColorScheme() async {
     // preload color theme for the "more info" page
-    if (kDebugMode) print("getting color scheme: $cover");
+    // if (kDebugMode) print("getting color scheme: $cover");
 
     final ColorScheme lightColorScheme = await ColorScheme.fromImageProvider(
       provider: NetworkImage(cover),
       brightness: Theme.of(context).brightness,
     );
-    if (kDebugMode) print("got color scheme");
+    // if (kDebugMode) print("got color scheme");
 
     if (mounted) {
       setState(() {
@@ -91,6 +91,7 @@ class _AlbumCardState extends State<AlbumCard> {
 
     if ((pref.getBool('${date.year}-${date.month}-${date.day}') ?? false)) {
       // The album has been cached
+      if (kDebugMode) print('Cache found!');
       List<String> albumData = pref.getStringList(
         '${date.year}-${date.month}-${date.day}-data',
       )!;
