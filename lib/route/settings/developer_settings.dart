@@ -37,7 +37,7 @@ class DeveloperSettings extends StatelessWidget {
         ),
         const Cache(name: "Clear entire cache", onClick: Cache.clearAll),
         const Cache(name: "Clear albums cache", onClick: Cache.deleteAlbumsCache),
-        const Cache(name: "Clear theme cache", onClick: Cache.test),
+        const Cache(name: "Clear UI theme cache", onClick: Cache.deleteUIThemeCache),
       ],
     );
   }
@@ -58,8 +58,9 @@ class Cache extends StatefulWidget {
   static Future<bool> clearAll() async {
     try{
       Cache.deleteAlbumsCache();
+      Cache.deleteUIThemeCache();
     } on Exception catch (e) {
-      if (kDebugMode) print("an error happened during clear: $e");
+      if (kDebugMode) print("An error happened during clear: $e");
       return false;
     }
     return true;
@@ -87,6 +88,17 @@ class Cache extends StatefulWidget {
         todaysDate =
             DateTime(todaysDate.year, todaysDate.month, todaysDate.day - 1);
       }
+    } on Exception catch (e) {
+      if (kDebugMode) throw 'failed to clear cache: $e';
+    }
+    return true;
+  }
+
+  static Future<bool> deleteUIThemeCache() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    DateTime date = DateTime.now();
+    try {
+      prefs.remove('${date.year}-${date.month}-${date.day}-theme');
     } on Exception catch (e) {
       if (kDebugMode) throw 'failed to clear cache: $e';
     }
