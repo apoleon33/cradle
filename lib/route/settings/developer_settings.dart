@@ -33,9 +33,18 @@ class DeveloperSettings extends StatelessWidget {
             ],
           ),
         ),
-        const Cache(name: "Clear entire cache", onClick: Cache.clearAll),
-        const Cache(name: "Clear albums cache", onClick: Cache.deleteAlbumsCache),
-        const Cache(name: "Clear UI theme cache", onClick: Cache.deleteUIThemeCache),
+        const Cache(
+          name: "Clear entire cache",
+          onClick: Cache.clearAll,
+        ),
+        const Cache(
+          name: "Clear albums cache",
+          onClick: Cache.deleteAlbumsCache,
+        ),
+        const Cache(
+          name: "Clear UI theme cache",
+          onClick: Cache.deleteUIThemeCache,
+        ),
       ],
     );
   }
@@ -54,7 +63,7 @@ class Cache extends StatefulWidget {
   static Future<bool> test() async => false;
 
   static Future<bool> clearAll() async {
-    try{
+    try {
       Cache.deleteAlbumsCache();
       Cache.deleteUIThemeCache();
     } on Exception catch (e) {
@@ -81,6 +90,7 @@ class Cache extends StatefulWidget {
             '${todaysDate.year}-${todaysDate.month}-${todaysDate.day}-data');
         prefs.remove(
             '${todaysDate.year}-${todaysDate.month}-${todaysDate.day}-averageRating');
+        prefs.remove('${todaysDate.year}-${todaysDate.month}-${todaysDate.day}-theme');
 
         if (kDebugMode) print("cleared album cache of $todaysDate");
         todaysDate =
