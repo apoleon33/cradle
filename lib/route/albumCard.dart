@@ -61,11 +61,38 @@ class _AlbumCardState extends State<AlbumCard> {
   Future<void> _getAlbumColorScheme() async {
     // preload color theme for the "more info" page
     // if (kDebugMode) print("getting color scheme: $cover");
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? theme =
+        prefs.getStringList('${date.year}-${date.month}-${date.day}-theme');
 
-    final ColorScheme lightColorScheme = await ColorScheme.fromImageProvider(
-      provider: NetworkImage(cover),
-      brightness: Theme.of(context).brightness,
-    );
+    final ColorScheme lightColorScheme;
+    if (theme == null) {
+      lightColorScheme = await ColorScheme.fromImageProvider(
+        provider: NetworkImage(cover),
+        brightness: Theme.of(context).brightness,
+      );
+
+      final Color mainColor = lightColorScheme.primary;
+      prefs.setStringList(
+        '${date.year}-${date.month}-${date.day}-theme',
+        <String>[
+          mainColor.red.toString(),
+          mainColor.green.toString(),
+          mainColor.blue.toString(),
+        ],
+      );
+    } else {
+      lightColorScheme = ColorScheme.fromSeed(
+        seedColor: Color.fromRGBO(
+          int.parse(theme[0]),
+          int.parse(theme[1]),
+          int.parse(theme[2]),
+          1.0,
+        ),
+        brightness: Theme.of(context).brightness,
+      );
+    }
+
     // if (kDebugMode) print("got color scheme");
 
     if (mounted) {
