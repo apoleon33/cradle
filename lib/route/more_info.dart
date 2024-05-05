@@ -16,8 +16,12 @@ class MoreInfo extends StatefulWidget {
 
   final ColorScheme lightColorScheme;
   final ColorScheme darkColorScheme;
+
   const MoreInfo(
-      {super.key, required this.album, required this.lightColorScheme, required this.darkColorScheme});
+      {super.key,
+      required this.album,
+      required this.lightColorScheme,
+      required this.darkColorScheme});
 
   @override
   State<StatefulWidget> createState() => _MoreInfo();
@@ -189,16 +193,23 @@ class _MoreInfo extends State<MoreInfo> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ClipRRect(
+                      Card(
+                        elevation: 2.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: ClipRRect(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(24)),
-                          child: Card(
-                            elevation: 2.0,
-                            child: Hero(
-                              tag: album.cover,
-                              child: Image.network(album.cover),
+                              const BorderRadius.all(Radius.circular(12.0)),
+                          child: Hero(
+                            tag: album.cover,
+                            child: Image.network(
+                              album.cover,
+                              fit: BoxFit.fitWidth,
                             ),
-                          ))
+                          ),
+                        ),
+                      )
                     ],
                   ),
                   Padding(
