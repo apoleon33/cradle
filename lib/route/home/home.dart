@@ -1,9 +1,9 @@
 import 'package:cradle/widgets/navigation.dart';
-import 'package:cradle/route/settings.dart';
+import 'package:cradle/route/settings/settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'albumCard.dart';
+import '../../widgets/albumCard.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});

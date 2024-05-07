@@ -1,7 +1,7 @@
 import 'package:cradle/widgets/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'route/home.dart';
+import 'route/home/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
