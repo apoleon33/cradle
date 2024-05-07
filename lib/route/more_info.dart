@@ -1,8 +1,10 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/api/lastfm_api.dart';
+import 'package:cradle/music_library.dart';
 import 'package:cradle/services.dart';
 import 'package:cradle/share.dart';
 import 'package:cradle/widgets/theme_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,15 +15,18 @@ import 'package:url_launcher/url_launcher.dart';
 
 class MoreInfo extends StatefulWidget {
   final Album album;
+  final DateTime date;
 
   final ColorScheme lightColorScheme;
   final ColorScheme darkColorScheme;
 
-  const MoreInfo(
-      {super.key,
-      required this.album,
-      required this.lightColorScheme,
-      required this.darkColorScheme});
+  const MoreInfo({
+    super.key,
+    required this.album,
+    required this.lightColorScheme,
+    required this.darkColorScheme,
+    required this.date,
+  });
 
   @override
   State<StatefulWidget> createState() => _MoreInfo();
@@ -34,6 +39,23 @@ class _MoreInfo extends State<MoreInfo> {
   late ColorScheme actualDarkColorScheme;
   late List<String> genres;
   late Service service;
+
+  late Library lib;
+  bool _addedStatus = false;
+
+  bool get addedStatus => _addedStatus;
+
+  set addedStatus(bool value) {
+    _addedStatus = value;
+
+    if (value) {
+      lib.addToLibrary(date: widget.date);
+      if (kDebugMode) print("added album's ${widget.date} to library");
+    } else {
+      lib.removeFromLibrary(widget.date);
+      if (kDebugMode) print("removed album's ${widget.date} to library");
+    }
+  }
 
   ScrollController scrollController = ScrollController();
   bool isNameHidden = false;
@@ -59,9 +81,12 @@ class _MoreInfo extends State<MoreInfo> {
       });
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      lib = await Library.createFromCache();
+
       _getAlbumDescription();
       _getService();
+      _initAddedStatus();
     });
   }
 
@@ -97,6 +122,8 @@ class _MoreInfo extends State<MoreInfo> {
       albumDescription = convertedDescription;
       genres = lastfmGenres;
     });
+
+    if (kDebugMode) print('addedStatus status: $addedStatus');
   }
 
   bool _isSametag(String tag1, String tag2) =>
@@ -108,6 +135,12 @@ class _MoreInfo extends State<MoreInfo> {
     final Service usedService = Service.values[serviceIndex];
 
     service = usedService;
+  }
+
+  Future<void> _initAddedStatus()async {
+    setState(() {
+      _addedStatus = lib.isInLibrary(widget.date);
+    });
   }
 
   @override
@@ -172,6 +205,16 @@ class _MoreInfo extends State<MoreInfo> {
                   ),
             ),
             actions: [
+              IconButton(
+                onPressed: () => {
+                  setState(() {
+                    addedStatus = !addedStatus;
+                  })
+                },
+                icon: (addedStatus)
+                    ? const Icon(Icons.library_add_check)
+                    : const Icon(Icons.library_add),
+              ),
               IconButton(
                 icon: const Icon(Icons.share),
                 color: theme.colorScheme.onSecondaryContainer,

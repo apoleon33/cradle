@@ -56,6 +56,7 @@ class DisplayAsList extends DisplayAlbum {
                 album: album,
                 lightColorScheme: lightColorScheme,
                 darkColorScheme: darkColorScheme,
+                date: date,
               )),
             );
           },

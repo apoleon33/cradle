@@ -39,11 +39,14 @@ class DisplayAlbumAsCard extends DisplayAlbum {
                   onTap: () {
                     Navigator.push(
                       context,
-                      createRoute(MoreInfo(
-                        album: album,
-                        lightColorScheme: lightColorScheme,
-                        darkColorScheme: darkColorScheme,
-                      )),
+                      createRoute(
+                        MoreInfo(
+                          album: album,
+                          lightColorScheme: lightColorScheme,
+                          darkColorScheme: darkColorScheme,
+                          date: date,
+                        ),
+                      ),
                     );
                   },
                   child: Column(
