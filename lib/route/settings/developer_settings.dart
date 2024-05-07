@@ -36,8 +36,9 @@ class DeveloperSettings extends StatelessWidget {
           ),
         ),
         const Cache(name: "Clear entire cache", onClick: Cache.clearAll),
-        const Cache(name: "Clear albums cache", onClick: Cache.deleteAlbumsCache),
-        const Cache(name: "Clear theme cache", onClick: Cache.test),
+        const Cache(
+            name: "Clear albums cache", onClick: Cache.deleteAlbumsCache),
+        const Cache(name: "Clear library", onClick: Cache.deleteLibraryCache),
       ],
     );
   }
@@ -56,8 +57,9 @@ class Cache extends StatefulWidget {
   static Future<bool> test() async => false;
 
   static Future<bool> clearAll() async {
-    try{
+    try {
       Cache.deleteAlbumsCache();
+      Cache.deleteLibraryCache();
     } on Exception catch (e) {
       if (kDebugMode) print("an error happened during clear: $e");
       return false;
@@ -90,6 +92,18 @@ class Cache extends StatefulWidget {
     } on Exception catch (e) {
       if (kDebugMode) throw 'failed to clear cache: $e';
     }
+    return true;
+  }
+
+  static Future<bool> deleteLibraryCache() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      prefs.remove('library');
+    } on Exception catch (e) {
+      if (kDebugMode) throw 'failed to clear cache: $e';
+    }
+    if (kDebugMode) print("Successfully cleared library's cache");
     return true;
   }
 
