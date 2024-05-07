@@ -22,6 +22,7 @@ class MoreInfoMenu extends StatelessWidget {
                   album: album,
                   lightColorScheme: const ColorScheme.light(),
                   darkColorScheme: const ColorScheme.dark(),
+                  date: DateTime.now(),
                 ),
               ));
         },
