@@ -137,10 +137,26 @@ class _MoreInfo extends State<MoreInfo> {
     service = usedService;
   }
 
-  Future<void> _initAddedStatus()async {
+  Future<void> _initAddedStatus() async {
     setState(() {
       _addedStatus = lib.isInLibrary(widget.date);
     });
+  }
+
+  void onClickLibrary() {
+    setState(() {
+      addedStatus = !addedStatus;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+            'Successfully ${(addedStatus) ? 'added' : 'removed'} ${album.name} ${(addedStatus) ? 'to' : 'from'} your music library'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: onClickLibrary,
+        ),
+      ),
+    );
   }
 
   @override
@@ -206,11 +222,7 @@ class _MoreInfo extends State<MoreInfo> {
             ),
             actions: [
               IconButton(
-                onPressed: () => {
-                  setState(() {
-                    addedStatus = !addedStatus;
-                  })
-                },
+                onPressed: onClickLibrary,
                 icon: (addedStatus)
                     ? const Icon(Icons.library_add_check)
                     : const Icon(Icons.library_add),
