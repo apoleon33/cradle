@@ -2,12 +2,13 @@ import 'package:cradle/album.dart';
 import 'package:cradle/api/cradle_api.dart';
 import 'package:cradle/api/lastfm_api.dart';
 import 'package:cradle/services.dart';
+import 'package:cradle/widgets/display_albumCard/display_as_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cradle/widgets/albumCard/display_as_card.dart';
-import 'package:cradle/widgets/albumCard/display_as_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'display_albumCard/display_as_card.dart';
 
 class AlbumCard extends StatefulWidget {
   final DateTime date;

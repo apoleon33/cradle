@@ -29,6 +29,11 @@ class _Navigation extends State<Navigation> {
           label: 'Home',
         ),
         NavigationDestination(
+          selectedIcon: Icon(Icons.library_music),
+          icon: Icon(Icons.library_music_outlined),
+          label: "Library",
+        ),
+        NavigationDestination(
           selectedIcon: Icon(Icons.settings),
           icon: Icon(Icons.settings_outlined),
           label: 'Settings',

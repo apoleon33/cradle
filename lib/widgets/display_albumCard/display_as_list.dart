@@ -1,22 +1,15 @@
-import 'package:cradle/widgets/albumCard/display_album.dart';
-import 'package:cradle/route/more_info.dart';
+import 'package:cradle/route/home/more_info/more_info.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cradle/album.dart';
+import 'display_album.dart';
 
 class DisplayAsList extends DisplayAlbum {
-  Album album;
-  DateTime date;
-
-  final ColorScheme lightColorScheme;
-  final ColorScheme darkColorScheme;
-
-  DisplayAsList({
+  const DisplayAsList({
     super.key,
-    required this.album,
-    required this.date,
-    required this.lightColorScheme,
-    required this.darkColorScheme,
+    required super.album,
+    required super.date,
+    required super.lightColorScheme,
+    required super.darkColorScheme,
   });
 
   @override
@@ -49,16 +42,7 @@ class DisplayAsList extends DisplayAlbum {
           ),
           style: ListTileStyle.list,
           isThreeLine: false,
-          onTap: () {
-            Navigator.push(
-              context,
-              createRoute(MoreInfo(
-                album: album,
-                lightColorScheme: lightColorScheme,
-                darkColorScheme: darkColorScheme,
-              )),
-            );
-          },
+          onTap: () => openMoreInfo(context),
         ),
         const Divider(indent: 16.0, endIndent: 16.0),
       ],

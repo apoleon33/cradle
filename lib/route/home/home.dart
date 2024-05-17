@@ -1,9 +1,10 @@
+import 'package:cradle/route/library/library.dart';
 import 'package:cradle/widgets/navigation.dart';
-import 'package:cradle/route/settings.dart';
+import 'package:cradle/route/settings/settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'albumCard.dart';
+import '../../widgets/albumCard.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -85,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
     int key = 1;
     deadline = newDeadline;
     albumList.removeLast(); // remove button
-     setState(() {});
+    setState(() {});
   }
 
   @override
@@ -93,10 +94,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _scrollController = ScrollController();
     albumList = [];
-     _scrollController.addListener(() {
-       if (_scrollController.position.atEdge){
-         if (_scrollController.position.pixels != 0) upgradeDeadline();
-       }
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels != 0) upgradeDeadline();
+      }
     });
 
     deadline = DateTime.now().subtract(const Duration(days: 7));
@@ -131,26 +132,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode){
+    if (kDebugMode) {
       print(isCard);
     }
+
+    MusicLibrary musicLibrary = const MusicLibrary();
 
     _createAlbumList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-                onPressed: _scrollToTop,
-                child: Text(
-                  widget.title,
-                  style: TextStyle(
-                    fontFamily: 'Cloister',
-                    fontSize: 24.0,
-                    color: Theme.of(context).textTheme.bodyMedium?.color,
+          alignment: Alignment.centerLeft,
+          child: (indexPage == 0)
+              ? TextButton(
+                  onPressed: _scrollToTop,
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                      fontFamily: 'Cloister',
+                      fontSize: 24.0,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                    ),
                   ),
-                ))),
+                )
+              : (indexPage == 1)
+                  ? const Text("Library")
+                  : null,
+        ),
         actions: (indexPage == 0)
             ? [
                 IconButton(
@@ -175,6 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
+        musicLibrary,
         const Settings(),
       ][indexPage],
       bottomNavigationBar: Navigation(
