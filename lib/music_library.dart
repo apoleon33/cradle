@@ -1,6 +1,7 @@
 import 'dart:async';
 
 // import 'package:flutter/foundation.dart';
+import 'package:cradle/custom_date.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,20 +36,7 @@ class Library {
 
     // formatting so that it looks like 'YYYY-MM-DD'
     for (String date in previousAlbums) {
-      List<String> dateParts = date.split('-');
-      String formattedDate = '';
-      for (int i = 0; i < dateParts.length; i++) {
-        if (dateParts[i].length == 1) {
-          formattedDate += '0';
-        }
-        formattedDate += dateParts[i];
-        if (i < dateParts.length - 1) {
-          formattedDate += '-';
-        }
-      }
-
-      // if (kDebugMode) print(formattedDate);
-      albums.add(DateTime.parse(formattedDate));
+      albums.add(FormattedDateTime.parseAndFormat(date));
     }
   }
 
@@ -65,7 +53,7 @@ class Library {
     prefs.setStringList('library', previousAlbums);
   }
 
-  void removeFromLibrary( DateTime date) {
+  void removeFromLibrary(DateTime date) {
     albums.remove(date);
 
     List<String> previousAlbums = prefs.getStringList('library') ?? [];
@@ -74,11 +62,11 @@ class Library {
     prefs.setStringList('library', previousAlbums);
   }
 
-  bool isInLibrary(DateTime date){
+  bool isInLibrary(DateTime date) {
     final DateTime clearedDate = DateTime(date.year, date.month, date.day);
     if (kDebugMode) print('date to search: $date');
     for (DateTime element in albums) {
-      if (element.isAtSameMomentAs(clearedDate)){
+      if (element.isAtSameMomentAs(clearedDate)) {
         return true;
       }
     }
