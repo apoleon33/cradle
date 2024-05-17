@@ -21,8 +21,19 @@ class DisplayAlbumAsGrid extends DisplayAlbum {
       width: width ?? 60,
       height: height ?? 60,
       child: InkWell(
-        onTap: () => openMoreInfo(context),
-        child: Image.network(album.cover),
+          onTap: () => openMoreInfo(context),
+          child: Hero(
+            tag: album.cover,
+            child: album.cover == 'assets/default.png'
+                ? Image.asset(
+              album.cover,
+              fit: BoxFit.fitWidth,
+            )
+                : Image.network(
+              album.cover,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
       ),
     );
   }
