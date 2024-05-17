@@ -1,6 +1,7 @@
 import 'package:cradle/album.dart';
 import 'package:cradle/api/cradle_api.dart';
 import 'package:cradle/api/lastfm_api.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +19,6 @@ class DynamicTheme extends StatefulWidget {
 class _DynamicTheme extends State<DynamicTheme> {
   ColorScheme currentColorScheme = const ColorScheme.light();
   ColorScheme currentDarkColorScheme = const ColorScheme.dark();
-  int themeMode = 0;
 
   @override
   void initState() {
@@ -26,7 +26,6 @@ class _DynamicTheme extends State<DynamicTheme> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _getTodayImage();
-      _getThemeModeFromSettings();
     });
   }
 
@@ -34,12 +33,6 @@ class _DynamicTheme extends State<DynamicTheme> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     //createTheme(widget.image);
-  }
-
-  void _getThemeModeFromSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    themeMode = prefs.getInt('color') ?? 0;
   }
 
   void _getTodayImage() async {
@@ -63,6 +56,57 @@ class _DynamicTheme extends State<DynamicTheme> {
     createTheme(widget.image);
   }
 
+  Future<void> createTheme(ImageProvider provider) async {
+    final prefs = await SharedPreferences.getInstance();
+    final DateTime date = DateTime.now();
+    final List<String>? theme = prefs.getStringList(
+        '${date.year}-${date.month}-${date.day}-theme');
+
+    final ColorScheme newLightColorScheme;
+    final ColorScheme newDarkColorScheme;
+    if (theme == null) {
+      newLightColorScheme = await ColorScheme.fromImageProvider(
+          provider: provider, brightness: Brightness.light);
+
+      newDarkColorScheme = await ColorScheme.fromImageProvider(
+          provider: provider, brightness: Brightness.dark);
+
+      final Color mainColor = newLightColorScheme.primary;
+      prefs.setStringList('${date.year}-${date.month}-${date.day}-theme',
+        <String>[
+          mainColor.red.toString(),
+          mainColor.green.toString(),
+          mainColor.blue.toString(),
+        ],);
+    } else {
+      if (kDebugMode) print("theme found in cache");
+
+      newLightColorScheme = ColorScheme.fromSeed(
+        seedColor: Color.fromRGBO(
+          int.parse(theme[0]),
+          int.parse(theme[1]),
+          int.parse(theme[2]),
+          1.0,
+        ),
+        brightness: Brightness.light,
+      );
+
+      newDarkColorScheme = ColorScheme.fromSeed(
+        seedColor: Color.fromRGBO(
+          int.parse(theme[0]),
+          int.parse(theme[1]),
+          int.parse(theme[2]),
+          1.0,
+        ),
+        brightness: Brightness.dark,
+      );
+    }
+    setState(() {
+      currentColorScheme = newLightColorScheme;
+      currentDarkColorScheme = newDarkColorScheme;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme lightColorScheme = currentColorScheme;
@@ -73,31 +117,18 @@ class _DynamicTheme extends State<DynamicTheme> {
           title: 'Cradle',
           theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
           darkTheme:
-              ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+          ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
           themeMode: (modeTheme.themeMode == 0)
               ? ThemeMode.system
               : (modeTheme.themeMode == 1)
-                  ? ThemeMode.light
-                  : ThemeMode.dark,
+              ? ThemeMode.light
+              : ThemeMode.dark,
           debugShowCheckedModeBanner: true,
           // easier to know which version im running
           home: widget.child,
         );
       },
     );
-  }
-
-  Future<void> createTheme(ImageProvider provider) async {
-    final ColorScheme newLightColorScheme = await ColorScheme.fromImageProvider(
-        provider: provider, brightness: Brightness.light);
-
-    final ColorScheme newDarkColorScheme = await ColorScheme.fromImageProvider(
-        provider: provider, brightness: Brightness.dark);
-
-    setState(() {
-      currentColorScheme = newLightColorScheme;
-      currentDarkColorScheme = newDarkColorScheme;
-    });
   }
 }
 
