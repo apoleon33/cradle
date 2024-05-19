@@ -2,8 +2,8 @@
 <img src="https://github.com/apoleon33/cradle/blob/master/doc/banner.png" width=512 height="250">
 </p>
 <p align="center">
-<img alt="GitHub Release" src="https://img.shields.io/github/v/release/apoleon33/cradle?include_prereleases">
-  <img alt="GitHub License" src="https://img.shields.io/github/license/apoleon33/cradle">
+<img alt="GitHub Release" src="https://img.shields.io/github/v/release/apoleon33/cradle?include_prereleases&logo=flutter&color=B185A7">
+  <img alt="GitHub License" src="https://img.shields.io/github/license/apoleon33/cradle?color=8D6B94">
 
 </p>
 
