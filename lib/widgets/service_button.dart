@@ -34,10 +34,6 @@ class _ServiceButtonState extends State<ServiceButton> {
         service = Service.values[serviceNumber];
       });
     }
-    String initialUrl = service.searchUrl;
-    String url = Uri.encodeFull(
-        '$initialUrl${widget.album.name} - ${widget.album.artist}');
-    _url = Uri.parse(url);
   }
 
   Future<void> _launchUrl() async {
@@ -48,6 +44,11 @@ class _ServiceButtonState extends State<ServiceButton> {
 
   @override
   Widget build(BuildContext context) {
+    String initialUrl = service.searchUrl;
+    String url = Uri.encodeFull(
+        '$initialUrl${widget.album.name} - ${widget.album.artist}');
+    _url = Uri.parse(url);
+
     return FilledButton.icon(
       icon: SvgPicture.asset(
         service.iconPath,
