@@ -2,7 +2,6 @@ import 'package:cradle/album.dart';
 import 'package:cradle/api/cradle_api.dart';
 import 'package:cradle/music_library.dart';
 import 'package:cradle/widgets/display_albumCard/display_as_grid.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class MusicLibrary extends StatefulWidget {
@@ -13,7 +12,7 @@ class MusicLibrary extends StatefulWidget {
 }
 
 class _MusicLibraryState extends State<MusicLibrary> {
-  late final Library lib;
+  late Library lib;
   List<Widget> libraryList = [];
   bool _libIsLoaded = false;
   late ScrollController scrollController;
@@ -25,13 +24,12 @@ class _MusicLibraryState extends State<MusicLibrary> {
     super.initState();
     scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      lib = await Library.createFromCache();
-
       _createAlbumList();
     });
   }
 
   Future<void> _createAlbumList() async {
+    lib = await Library.createFromCache();
     List<Album> albumList = [];
     CradleApi cradleApi = CradleApi();
     List<DateTime> dateList = lib.albums;
@@ -48,13 +46,21 @@ class _MusicLibraryState extends State<MusicLibrary> {
     }
 
     libraryList = [];
-    // if (kDebugMode) print(lib.albums);
-    for (var i = (albumList.length % 2 == 0) ? 0 : 1;
-        i < albumList.length;
-        i++) {
-      if (kDebugMode) print(i);
+    int startIndex = 0;
+    // If the number of albums is an odd number -> add first element, then format as usual
+    if (albumList.length % 2 != 0) {
       libraryList.add(
-        _formatAsRow(
+        _FormatAsRow(
+          albums: <Album>[albumList[0]],
+          dates: <DateTime>[dateList[0]],
+        ),
+      );
+      startIndex = 1;
+    }
+
+    for (var i = startIndex; i < albumList.length; i++) {
+      libraryList.add(
+        _FormatAsRow(
           albums: <Album>[
             albumList[i],
             (i < albumList.length + 1) ? albumList[i + 1] : albumList[i],
@@ -73,36 +79,9 @@ class _MusicLibraryState extends State<MusicLibrary> {
     });
   }
 
-  Widget _formatAsRow({
-    required List<Album> albums,
-    required List<DateTime> dates,
-  }) =>
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          for (int i = 0; i < albums.length; i++)
-            DisplayAlbumAsGrid(
-              album: albums[i],
-              date: dates[i],
-              lightColorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.teal,
-                brightness: Brightness.light,
-              ),
-              darkColorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.teal,
-                brightness: Brightness.dark,
-              ),
-              width: 200,
-              height: 200,
-            ),
-        ],
-      );
-
   @override
   Widget build(BuildContext context) {
-    List<Widget> content = [
-      const Padding(padding: EdgeInsets.all(8.0))
-    ];
+    List<Widget> content = [const Padding(padding: EdgeInsets.all(8.0))];
     content.addAll(libraryList);
 
     return RefreshIndicator(
@@ -117,15 +96,48 @@ class _MusicLibraryState extends State<MusicLibrary> {
         controller: scrollController,
         slivers: [
           SliverToBoxAdapter(
-              child: (_libIsLoaded)
-                  ? Column(
-                      children: content,
-                    )
-                  : LinearProgressIndicator(
-                      value: progress,
-                    ))
+            child: (_libIsLoaded)
+                ? Column(
+                    children: content,
+                  )
+                : LinearProgressIndicator(
+                    value: progress,
+                  ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+/// Small [StatelessWidget] to format a row of [DisplayAlbumAsGrid] widgets
+class _FormatAsRow extends StatelessWidget {
+  final List<Album> albums;
+  final List<DateTime> dates;
+
+  const _FormatAsRow({super.key, required this.albums, required this.dates});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        for (int i = 0; i < albums.length; i++)
+          DisplayAlbumAsGrid(
+            album: albums[i],
+            date: dates[i],
+            lightColorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.teal,
+              brightness: Brightness.light,
+            ),
+            darkColorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.teal,
+              brightness: Brightness.dark,
+            ),
+            width: 200,
+            height: 200,
+          ),
+      ],
     );
   }
 }
