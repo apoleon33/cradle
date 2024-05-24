@@ -6,21 +6,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class AboutSettings extends StatelessWidget {
   final String _licenseContent =
-      """     Cradle is an application designed to recommend you one album per day.
-    Copyright (C) 2024 apoleon33
+      """     Cradle is an application designed to recommend you one album per day. Copyright (C) 2024 apoleon33
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see """;
+    You should have received a copy of the GNU General Public License along with this program.  If not, see """;
 
   final String _licenseUrl = "https://www.gnu.org/licenses/";
 
@@ -56,6 +48,7 @@ class AboutSettings extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: RichText(
+                    textAlign: TextAlign.justify,
                     text: TextSpan(
                       text: _licenseContent,
                       style: Theme.of(context).textTheme.bodyMedium,
